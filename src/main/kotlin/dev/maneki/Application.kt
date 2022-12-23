@@ -29,27 +29,21 @@ fun Application.module() {
     configureSerialization()
     configureRouting()
 
-    initDatabase()
 
-//    // https://github.com/cashapp/sqldelight/issues/1605
-//    Database.Schema.create(driver)
-//
-//    val database = Database(driver)
-//
-//    val players = database.userQueries.insert(
-//        "meow@maneki.dev",
-//        "Scooby",
-//        "Trowbridge",
-//    )
-//
-//    val x = 1;
-}
-
-private fun Application.initDatabase() {
     val driver = createMySqlDatabaseDriver().apply {
         environment.monitor.subscribe(ApplicationStopped) { close() }
     }
 
+    val database = createDatabase(driver)
+
+    val users = database.databaseQueries.selectAllUsers().executeAsList()
+    val foos = database.databaseQueries.selectAllFoo().executeAsList()
+
+    val x = 1
+
+}
+
+private fun Application.createDatabase(driver: JdbcDriver): Database {
     val schemaVersion = Database.Schema.version
 
     try {
@@ -69,26 +63,26 @@ private fun Application.initDatabase() {
     } catch (ex: Exception) {
         Database.Schema.migrate(driver, 1, schemaVersion)
     }
+
+    return Database(driver)
 }
 
 private fun createMySqlDatabaseDriver(): JdbcDriver {
-    return HikariDataSource(
-        HikariConfig().apply {
-            jdbcUrl = System.getenv("JDBC_URL").apply {
-                if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize database driver: JDBC_URL environment variable required (SQLite or MySQL).")
-            }
-            username = System.getenv("MYSQL_USER").apply {
-                if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize MySQL driver: MYSQL_USER environment variable required.")
-            }
-            password = System.getenv("MYSQL_PASSWORD").apply {
-                if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize MySQL driver: MYSQL_USER environment variable required.")
-            }
-            driverClassName = "com.mysql.jdbc.Driver"
-            connectionTestQuery = "SELECT 1"
-            poolName = "MySqlPool"
-            maximumPoolSize = 50
-            maxLifetime = 60000
-            idleTimeout = 45000
+    return HikariDataSource(HikariConfig().apply {
+        jdbcUrl = System.getenv("JDBC_URL").apply {
+            if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize database driver: JDBC_URL environment variable required (SQLite or MySQL).")
         }
-    ).asJdbcDriver()
+        username = System.getenv("MYSQL_USER").apply {
+            if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize MySQL driver: MYSQL_USER environment variable required.")
+        }
+        password = System.getenv("MYSQL_PASSWORD").apply {
+            if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize MySQL driver: MYSQL_USER environment variable required.")
+        }
+        driverClassName = "com.mysql.jdbc.Driver"
+        connectionTestQuery = "SELECT 1"
+        poolName = "MySqlPool"
+        maximumPoolSize = 50
+        maxLifetime = 60000
+        idleTimeout = 45000
+    }).asJdbcDriver()
 }
