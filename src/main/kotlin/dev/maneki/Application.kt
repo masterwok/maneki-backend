@@ -59,7 +59,7 @@ fun Database.Companion.init(app: Application): Database {
         if (currentSchemaVersion < schemaVersion) {
             Schema.migrate(driver, currentSchemaVersion, schemaVersion)
         }
-    } catch (ex: Exception) {
+    } catch (_: Exception) {
         Schema.migrate(driver, 1, schemaVersion)
     }
 
