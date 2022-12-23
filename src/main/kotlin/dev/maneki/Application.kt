@@ -12,6 +12,7 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import java.lang.Exception
+import javax.xml.crypto.Data
 
 fun main() {
     embeddedServer(
@@ -34,7 +35,7 @@ fun Application.module() {
         environment.monitor.subscribe(ApplicationStopped) { close() }
     }
 
-    val database = createDatabase(driver)
+    val database = Database.getInstance(this)
 
     val users = database.databaseQueries.selectAllUsers().executeAsList()
     val foos = database.databaseQueries.selectAllFoo().executeAsList()
@@ -43,8 +44,12 @@ fun Application.module() {
 
 }
 
-private fun createDatabase(driver: JdbcDriver): Database {
-    val schemaVersion = Database.Schema.version
+fun Database.Companion.getInstance(app: Application): Database {
+    val driver = createMySqlDatabaseDriver().apply {
+        app.environment.monitor.subscribe(ApplicationStopped) { close() }
+    }
+
+    val schemaVersion = Schema.version
 
     try {
         val currentSchemaVersion = driver.executeQuery(
@@ -57,15 +62,16 @@ private fun createDatabase(driver: JdbcDriver): Database {
             it.getLong(0)!!.toInt()
         } + 1
 
-        if (currentSchemaVersion < Database.Schema.version) {
-            Database.Schema.migrate(driver, currentSchemaVersion, schemaVersion)
+        if (currentSchemaVersion < schemaVersion) {
+            Schema.migrate(driver, currentSchemaVersion, schemaVersion)
         }
     } catch (ex: Exception) {
-        Database.Schema.migrate(driver, 1, schemaVersion)
+        Schema.migrate(driver, 1, schemaVersion)
     }
 
     return Database(driver)
 }
+
 
 private fun createMySqlDatabaseDriver(): JdbcDriver {
     return HikariDataSource(HikariConfig().apply {
