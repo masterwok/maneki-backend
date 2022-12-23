@@ -12,7 +12,6 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import java.lang.Exception
-import javax.xml.crypto.Data
 
 fun main() {
     embeddedServer(
@@ -35,7 +34,7 @@ fun Application.module() {
         environment.monitor.subscribe(ApplicationStopped) { close() }
     }
 
-    val database = Database.getInstance(this)
+    val database = Database.init(this)
 
     val users = database.databaseQueries.selectAllUsers().executeAsList()
     val foos = database.databaseQueries.selectAllFoo().executeAsList()
@@ -44,7 +43,7 @@ fun Application.module() {
 
 }
 
-fun Database.Companion.getInstance(app: Application): Database {
+fun Database.Companion.init(app: Application): Database {
     val driver = createMySqlDatabaseDriver().apply {
         app.environment.monitor.subscribe(ApplicationStopped) { close() }
     }
