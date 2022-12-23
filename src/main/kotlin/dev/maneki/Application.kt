@@ -29,11 +29,6 @@ fun Application.module() {
     configureSerialization()
     configureRouting()
 
-
-    val driver = createMySqlDatabaseDriver().apply {
-        environment.monitor.subscribe(ApplicationStopped) { close() }
-    }
-
     val database = Database.init(this)
 
     val users = database.databaseQueries.selectAllUsers().executeAsList()
