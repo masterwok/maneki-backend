@@ -43,7 +43,7 @@ fun Application.module() {
 
 }
 
-private fun Application.createDatabase(driver: JdbcDriver): Database {
+private fun createDatabase(driver: JdbcDriver): Database {
     val schemaVersion = Database.Schema.version
 
     try {
