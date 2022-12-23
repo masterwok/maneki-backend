@@ -1,0 +1,17 @@
+CREATE TABLE schema_version (
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  version INT NOT NULL UNIQUE
+);
+
+CREATE TABLE user (
+  id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL
+);
+
+CREATE INDEX user_id ON user(id);
+CREATE INDEX user_email ON user(email);
+
+INSERT INTO schema_version (version) VALUES (1);
+INSERT INTO user (id, email, first_name, last_name) VALUES (NULL, 'Jonathan.Trowbridge@gmail.com', 'Jonathan', 'Trowbridge');

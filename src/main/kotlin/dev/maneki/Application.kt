@@ -1,12 +1,17 @@
 package dev.maneki
 
-//import com.squareup.sqldelight.gradle.SqlDelightDatabase
-//import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import com.squareup.sqldelight.sqlite.driver.JdbcDriver
+import com.squareup.sqldelight.sqlite.driver.asJdbcDriver
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
+import dev.maneki.plugins.configureHTTP
+import dev.maneki.plugins.configureMonitoring
+import dev.maneki.plugins.configureRouting
+import dev.maneki.plugins.configureSerialization
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import dev.maneki.plugins.*
-//import sqldelight.com.squareup.sqlite.migrations.Database
+import java.lang.Exception
 
 fun main() {
     embeddedServer(
@@ -23,14 +28,67 @@ fun Application.module() {
     configureMonitoring()
     configureSerialization()
     configureRouting()
+
+    initDatabase()
+
+//    // https://github.com/cashapp/sqldelight/issues/1605
+//    Database.Schema.create(driver)
+//
+//    val database = Database(driver)
+//
+//    val players = database.userQueries.insert(
+//        "meow@maneki.dev",
+//        "Scooby",
+//        "Trowbridge",
+//    )
+//
+//    val x = 1;
 }
 
+private fun Application.initDatabase() {
+    val driver = createMySqlDatabaseDriver().apply {
+        environment.monitor.subscribe(ApplicationStopped) { close() }
+    }
 
-fun Application.foo() {
-//    val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+    val schemaVersion = Database.Schema.version
 
+    try {
+        val currentSchemaVersion = driver.executeQuery(
+            null,
+            "SELECT version FROM schema_version ORDER BY version DESC LIMIT 1;",
+            0,
+            null,
+        ).use {
+            it.next()
+            it.getLong(0)!!.toInt()
+        } + 1
 
-//    val foo = MyDatabase(driver)
-//
-//    val playerQueries = foo.playerQueries
+        if (currentSchemaVersion < Database.Schema.version) {
+            Database.Schema.migrate(driver, currentSchemaVersion, schemaVersion)
+        }
+    } catch (ex: Exception) {
+        Database.Schema.migrate(driver, 1, schemaVersion)
+    }
+}
+
+private fun createMySqlDatabaseDriver(): JdbcDriver {
+    return HikariDataSource(
+        HikariConfig().apply {
+            jdbcUrl = System.getenv("JDBC_URL").apply {
+                if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize database driver: JDBC_URL environment variable required (SQLite or MySQL).")
+            }
+            username = System.getenv("MYSQL_USER").apply {
+                if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize MySQL driver: MYSQL_USER environment variable required.")
+            }
+            password = System.getenv("MYSQL_PASSWORD").apply {
+                if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize MySQL driver: MYSQL_USER environment variable required.")
+            }
+            driverClassName = "com.mysql.jdbc.Driver"
+            connectionTestQuery = "SELECT 1"
+            poolName = "MySqlPool"
+            maximumPoolSize = 50
+            maxLifetime = 60000
+            idleTimeout = 45000
+        }
+    ).asJdbcDriver()
 }

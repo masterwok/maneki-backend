@@ -1,0 +1,12 @@
+selectAll:
+SELECT *
+FROM user;
+
+insert:
+INSERT INTO user
+VALUES (NULL, ?, ?, ?);
+
+insertUser:
+INSERT INTO user
+VALUES ?;
+

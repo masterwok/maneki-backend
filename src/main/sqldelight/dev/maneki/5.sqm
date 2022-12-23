@@ -1,0 +1,5 @@
+UPDATE schema_version SET version = 5;
+
+CREATE TABLE baz (
+  id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT
+);

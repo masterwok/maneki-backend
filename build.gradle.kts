@@ -2,6 +2,7 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val sqldelight_version: String by project
+val mysql_connector_java_version: String by project
 
 plugins {
     kotlin("jvm") version "1.7.20"
@@ -24,9 +25,10 @@ repositories {
 }
 
 sqldelight {
-    database("DevelopmentSqliteDatabase") {
-        dialect = "sqlite:3.18"
+    database("Database") {
+        dialect = "mysql"
         packageName = "dev.maneki"
+        deriveSchemaFromMigrations = true
     }
 }
 
@@ -41,8 +43,15 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
 
+    // Force coroutines version
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("com.squareup.sqldelight:sqlite-driver:$sqldelight_version")
+
+    // JDBC driver
+    implementation("com.squareup.sqldelight:jdbc-driver:$sqldelight_version")
+    runtimeOnly("mysql:mysql-connector-java:$mysql_connector_java_version")
+
+    // Hikari JDBC connection pool
+    implementation("com.zaxxer:HikariCP:5.0.1")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

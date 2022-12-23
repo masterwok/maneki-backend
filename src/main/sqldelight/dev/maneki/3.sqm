@@ -1,0 +1,7 @@
+
+UPDATE schema_version SET version = 3;
+
+
+CREATE TABLE foo (
+  id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT
+);
