@@ -1,6 +1,6 @@
 package dev.maneki.plugins
 
-import dev.maneki.routes.playerRouting
+import dev.maneki.routes.userRouting
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -8,7 +8,7 @@ import io.ktor.server.response.*
 fun Application.configureRouting() {
 
     routing {
-        playerRouting()
+        userRouting()
     }
 
     routing {

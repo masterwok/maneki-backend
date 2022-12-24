@@ -35,6 +35,14 @@ fun Application.module() {
     val isValidPassword = HashUtil.verifyPassword(password, user.password)
     val foo = HashUtil.verifyPassword("invalidPassword", user.password)
 
+//    database.userQueries.insert
+    database.userQueries.insertUserWith(
+        "Scooby.Trowbridge@gmail.com",
+        HashUtil.hashPassword("foo"),
+        "Scooby",
+        "Trowbridge"
+    )
+
     val x = 1
 
 }

@@ -56,6 +56,9 @@ dependencies {
     // Encryption for passwords
     implementation("at.favre.lib:bcrypt:0.9.0")
 
+    // DateTimes
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

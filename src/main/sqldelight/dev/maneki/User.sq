@@ -1,14 +1,22 @@
+
 selectAllUsers:
 SELECT *
 FROM user;
 
 insertUserWith:
 INSERT INTO user
-VALUES (NULL, ?, ?, ?, ?, ?, ?);
-
-insertUser:
-INSERT INTO user
-VALUES ?;
+(
+  email,
+  password,
+  first_name,
+  last_name
+)
+VALUES (
+  :email,
+  :password,
+  :firstName,
+  :lastName
+);
 
 selectById:
 SELECT *
