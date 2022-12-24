@@ -9,9 +9,9 @@ CREATE TABLE user (
   password VARCHAR(60) NOT NULL,
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
-  -- Need to determine how/if possible to allow inserts without explicitly providing both date times
+  -- TODO (JT): Need to determine how/if possible to allow inserts without explicitly providing both date times
   created_on DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  -- Need to update this to be nullable and to test that it actually updates on update of row
+  -- TODO (JT): Need to update this to be nullable and to test that it actually updates on update of row
   updated_on DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
