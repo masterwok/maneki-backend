@@ -16,15 +16,7 @@ fun Database.Companion.init(app: Application): Database {
     val schemaVersion = Schema.version
 
     try {
-        val currentSchemaVersion = driver.executeQuery(
-            null,
-            "SELECT version FROM schema_version ORDER BY version DESC LIMIT 1;",
-            0,
-            null,
-        ).use {
-            it.next()
-            it.getLong(0)!!.toInt()
-        } + 1
+        val currentSchemaVersion = getCurrentSchemaVersion(driver)
 
         if (currentSchemaVersion < schemaVersion) {
             Schema.migrate(driver, currentSchemaVersion, schemaVersion)
@@ -34,6 +26,18 @@ fun Database.Companion.init(app: Application): Database {
     }
 
     return Database(driver)
+}
+
+private fun getCurrentSchemaVersion(driver: JdbcDriver): Int = driver.let {
+    driver.executeQuery(
+        null,
+        "SELECT version FROM schema_version ORDER BY version DESC LIMIT 1;",
+        0,
+        null,
+    ).use {
+        it.next()
+        it.getLong(0)!!.toInt()
+    } + 1
 }
 
 private fun createMySqlDatabaseDriver(): JdbcDriver {
