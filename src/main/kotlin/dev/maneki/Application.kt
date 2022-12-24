@@ -27,13 +27,12 @@ fun Application.module() {
     val database = Database.init(this)
 
     val password = "TestOn1="
-    val hashedPassword = HashUtil.hashPassword(password)
 
     val user = database.userQueries.selectById(1).executeAsOne()
 
     val allUsers = database.userQueries.selectAllUsers().executeAsList()
 
-    val isValidPassword = HashUtil.verifyPassword(hashedPassword, user.password)
+    val isValidPassword = HashUtil.verifyPassword(password, user.password)
     val foo = HashUtil.verifyPassword("invalidPassword", user.password)
 
     val x = 1

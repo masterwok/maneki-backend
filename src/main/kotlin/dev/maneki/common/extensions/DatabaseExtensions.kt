@@ -1,5 +1,6 @@
 package dev.maneki.common.extensions
 
+import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.sqlite.driver.JdbcDriver
 import com.squareup.sqldelight.sqlite.driver.asJdbcDriver
 import com.zaxxer.hikari.HikariConfig
@@ -13,19 +14,21 @@ fun Database.Companion.init(app: Application): Database {
         app.environment.monitor.subscribe(ApplicationStopped) { close() }
     }
 
-    val schemaVersion = Schema.version
+    Schema.migrateIfRequired(driver)
 
+    return Database(driver)
+}
+
+private fun SqlDriver.Schema.migrateIfRequired(driver: JdbcDriver) {
     try {
         val currentSchemaVersion = getCurrentSchemaVersion(driver)
 
-        if (currentSchemaVersion < schemaVersion) {
-            Schema.migrate(driver, currentSchemaVersion, schemaVersion)
+        if (currentSchemaVersion < version) {
+            Database.Schema.migrate(driver, currentSchemaVersion, version)
         }
     } catch (_: Exception) {
-        Schema.migrate(driver, 1, schemaVersion)
+        Database.Schema.migrate(driver, 1, version)
     }
-
-    return Database(driver)
 }
 
 private fun getCurrentSchemaVersion(driver: JdbcDriver): Int = driver.let {
