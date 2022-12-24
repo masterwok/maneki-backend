@@ -1,7 +1,0 @@
-
-UPDATE schema_version SET version = 4;
-
-
-CREATE TABLE bar (
-  id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT
-);

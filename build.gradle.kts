@@ -53,6 +53,9 @@ dependencies {
     // Hikari JDBC connection pool
     implementation("com.zaxxer:HikariCP:5.0.1")
 
+    // Encryption for passwords
+    implementation("at.favre.lib:bcrypt:0.9.0")
+
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

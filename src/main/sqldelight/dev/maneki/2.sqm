@@ -1,4 +1,0 @@
-
-UPDATE schema_version SET version = 2;
-
-INSERT INTO user (id, email, first_name, last_name) VALUES (NULL, 'Scooby.Trowbridge@gmail.com', 'Scooby', 'Trowbridge');

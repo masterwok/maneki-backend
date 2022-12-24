@@ -4,13 +4,13 @@ FROM user;
 
 insertUserWith:
 INSERT INTO user
-VALUES (NULL, ?, ?, ?);
+VALUES (NULL, ?, ?, ?, ?, ?, ?);
 
 insertUser:
 INSERT INTO user
 VALUES ?;
 
-selectAllFoo:
+selectById:
 SELECT *
-FROM foo;
-
+FROM user
+WHERE id = ?;

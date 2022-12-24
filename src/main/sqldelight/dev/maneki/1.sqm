@@ -6,12 +6,31 @@ CREATE TABLE schema_version (
 CREATE TABLE user (
   id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
   email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(60) NOT NULL,
   first_name VARCHAR(50) NOT NULL,
-  last_name VARCHAR(50) NOT NULL
+  last_name VARCHAR(50) NOT NULL,
+  -- Need to determine how/if possible to allow inserts without explicitly providing both date times
+  created_on DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  -- Need to update this to be nullable and to test that it actually updates on update of row
+  updated_on DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE INDEX user_id ON user(id);
 CREATE INDEX user_email ON user(email);
 
 INSERT INTO schema_version (version) VALUES (1);
-INSERT INTO user (id, email, first_name, last_name) VALUES (NULL, 'Jonathan.Trowbridge@gmail.com', 'Jonathan', 'Trowbridge');
+
+INSERT INTO user (
+  id,
+  email,
+  password,
+  first_name,
+  last_name
+)
+VALUES (
+  NULL,
+  'Jonathan.Trowbridge@gmail.com',
+  '$2a$12$KoNm5Aywyopx2nZm3UG32e5noI7hakt2vu5oHOGa887mHqnbuahmi',
+  'Jonathan',
+  'Trowbridge'
+);
