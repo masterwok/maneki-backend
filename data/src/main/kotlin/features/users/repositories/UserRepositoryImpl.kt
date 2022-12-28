@@ -2,12 +2,14 @@ package features.users.repositories
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOne
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import dev.maneki.data.UserQueries
 import common.utils.HashUtil
 import features.users.extensions.from
 import features.users.models.CreateUserModel
 import features.users.models.User
+import features.users.repositories.exceptions.CreateUserUnknownException
+import features.users.repositories.exceptions.UserAlreadyExistsException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.sql.SQLIntegrityConstraintViolationException
@@ -30,17 +32,19 @@ class UserRepositoryImpl(
                 User.from(userQueries.selectById(it.toInt()).executeAsOne())
             }
         } catch (ex: SQLIntegrityConstraintViolationException) {
-            // TODO: Throw UserRepositoryException
-            throw Exception("foo bar baz bax")
+            throw UserAlreadyExistsException(ex)
+        } catch (ex: Exception) {
+            throw CreateUserUnknownException(ex)
         }
     }
 
-    // TODO (JT): Ensure null case is handled by replacing [mapToOne].
-    override suspend fun queryUserById(id: Int): Flow<User> = userQueries
-        .selectById(id)
-        .asFlow()
-        .mapToOne()
-        .map(User.Companion::from)
+    override suspend fun queryUserById(id: Int): Flow<User?> {
+        return userQueries
+            .selectById(id)
+            .asFlow()
+            .mapToOneOrNull()
+            .map { user -> user?.let(User::from) }
+    }
 
     override suspend fun queryUsers(): Flow<List<User>> {
         return userQueries.users()

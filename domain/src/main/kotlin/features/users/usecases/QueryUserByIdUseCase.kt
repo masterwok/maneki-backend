@@ -6,6 +6,6 @@ import features.users.repositories.UserRepository
 
 class QueryUserByIdUseCase(
     private val userRepository: UserRepository
-) : QueryUseCaseWithParam<Int, User>() {
+) : QueryUseCaseWithParam<Int, User?>() {
     override suspend fun invoke(param: Int) = userRepository.queryUserById(param)
 }
