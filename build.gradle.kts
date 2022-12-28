@@ -43,21 +43,11 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
 
-    // Force coroutines version
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-
-    // JDBC driver
-    implementation("com.squareup.sqldelight:jdbc-driver:$sqldelight_version")
-    runtimeOnly("mysql:mysql-connector-java:$mysql_connector_java_version")
-
-    // Hikari JDBC connection pool
-    implementation("com.zaxxer:HikariCP:5.0.1")
-
-    // Encryption for passwords
-    implementation("at.favre.lib:bcrypt:0.9.0")
-
     // DateTimes
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
+    implementation(project(":domain"))
+    implementation(project(":data"))
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

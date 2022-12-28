@@ -1,4 +1,4 @@
-package dev.maneki.common.usecases
+package common.usecases
 
 import kotlinx.coroutines.flow.Flow
 
