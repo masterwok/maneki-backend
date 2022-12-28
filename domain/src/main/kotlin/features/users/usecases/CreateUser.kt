@@ -5,7 +5,7 @@ import features.users.models.CreateUserModel
 import features.users.models.User
 import features.users.repositories.UserRepository
 
-class CreateUserUseCase(
+class CreateUser(
     private val userRepository: UserRepository
 ) : CommandUseCaseWithParam<CreateUserModel, User>() {
     override suspend fun invoke(param: CreateUserModel) = userRepository.createUser(param)

@@ -7,4 +7,4 @@ sealed class UserRepositoryException(
 
 class UserAlreadyExistsException(cause: Throwable) : UserRepositoryException("Username already exists.", cause)
 
-class CreateUserUnknownException(cause: Throwable) : UserRepositoryException("An unknown exception occurred.", cause)
+class CreateUserUnknownException(cause: Throwable) : UserRepositoryException("An unknown error occurred.", cause)

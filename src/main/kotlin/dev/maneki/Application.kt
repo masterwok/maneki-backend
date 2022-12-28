@@ -14,8 +14,8 @@ fun main() {
 }
 
 fun Application.module() {
-//    configureSecurity()
     configureKoin()
+    configureSecurity()
     configureHTTP()
     configureMonitoring()
     configureSerialization()

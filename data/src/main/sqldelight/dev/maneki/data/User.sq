@@ -29,3 +29,8 @@ selectById:
 SELECT *
 FROM user
 WHERE id = ?;
+
+selectByEmail:
+SELECT *
+FROM user
+WHERE email = ?;

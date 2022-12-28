@@ -11,6 +11,7 @@ import features.users.models.User
 import features.users.repositories.exceptions.CreateUserUnknownException
 import features.users.repositories.exceptions.UserAlreadyExistsException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.sql.SQLIntegrityConstraintViolationException
 
@@ -38,7 +39,7 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun queryUserById(id: Int): Flow<User?> {
+    override fun queryUserById(id: Int): Flow<User?> {
         return userQueries
             .selectById(id)
             .asFlow()
@@ -46,10 +47,27 @@ class UserRepositoryImpl(
             .map { user -> user?.let(User::from) }
     }
 
-    override suspend fun queryUsers(): Flow<List<User>> {
+    override fun queryUserByEmail(email: String): Flow<User?> {
+        return queryUserDaoByEmail(email).map { user -> user?.let(User::from) }
+    }
+
+    private fun queryUserDaoByEmail(email: String): Flow<dev.maneki.data.User?> {
+        return userQueries
+            .selectByEmail(email)
+            .asFlow()
+            .mapToOneOrNull()
+    }
+
+    override fun queryUsers(): Flow<List<User>> {
         return userQueries.users()
             .asFlow()
             .mapToList()
             .map { users -> users.map(User::from) }
+    }
+
+    override suspend fun validatePassword(email: String, password: String): Boolean {
+        return queryUserDaoByEmail(email).firstOrNull()?.let {
+            HashUtil.verifyPassword(password, it.password)
+        } ?: false
     }
 }

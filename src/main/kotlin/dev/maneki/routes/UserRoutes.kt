@@ -1,44 +1,35 @@
 package dev.maneki.routes
 
-import dev.maneki.dtos.CreateUserDto
-import dev.maneki.dtos.UserDto
-import dev.maneki.dtos.from
-import dev.maneki.dtos.toCreateUserModel
+import dev.maneki.dtos.*
 import features.users.models.User
 import features.users.repositories.exceptions.CreateUserUnknownException
 import features.users.repositories.exceptions.UserAlreadyExistsException
-import features.users.usecases.CreateUserUseCase
-import features.users.usecases.QueryUserByIdUseCase
-import features.users.usecases.QueryUsersUseCase
+import features.users.usecases.CreateUser
+import features.users.usecases.QueryUserById
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import org.koin.ktor.ext.inject
 
 fun Route.userRouting() {
-    val createUser by inject<CreateUserUseCase>()
-    val queryUserById by inject<QueryUserByIdUseCase>()
-    val queryUsers by inject<QueryUsersUseCase>()
+    val createUser by inject<CreateUser>()
+    val queryUserById by inject<QueryUserById>()
 
     route("user") {
-        get {
-            call.respond(queryUsers().first().map(UserDto::from))
-        }
         get("{id?}") {
-            val id = call.parameters["id"]?.toInt()
+            val id = call.parameters["id"]?.toIntOrNull()
 
             if (id == null) {
-                call.respond(HttpStatusCode.BadRequest, "Invalid id parameter")
+                call.respond(HttpStatusCode.BadRequest, ApiResponse.error("Invalid id parameter"))
                 return@get
             }
 
             when (val result = queryUserById(id).firstOrNull()) {
-                is User -> call.respond(HttpStatusCode.Created, UserDto.from(result))
-                null -> call.respond(HttpStatusCode.NotFound, "User not found")
+                is User -> call.respond(ApiResponse.success(UserDto.from(result)))
+                null -> call.respond(HttpStatusCode.NotFound, ApiResponse.error("User not found"))
             }
         }
         post {
@@ -53,13 +44,17 @@ fun Route.userRouting() {
             }
 
             when (result) {
-                is User -> call.respond(UserDto.from(result))
-                is UserAlreadyExistsException -> call.respond(HttpStatusCode.Conflict, result.message)
-                is CreateUserUnknownException -> call.respond(HttpStatusCode.InternalServerError, result.message)
-            }
-        }
-        delete("{id?}") {
+                is User -> call.respond(ApiResponse.success(UserDto.from(result)))
+                is UserAlreadyExistsException -> call.respond(
+                    HttpStatusCode.Conflict,
+                    ApiResponse.error(result.message),
+                )
 
+                is CreateUserUnknownException -> call.respond(
+                    HttpStatusCode.InternalServerError,
+                    ApiResponse.error(result.message),
+                )
+            }
         }
     }
 
