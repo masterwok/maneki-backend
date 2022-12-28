@@ -10,25 +10,32 @@ import features.users.models.CreateUserModel
 import features.users.models.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.sql.SQLIntegrityConstraintViolationException
 
 class UserRepositoryImpl(
     private val userQueries: UserQueries,
 ) : UserRepository {
     override suspend fun createUser(user: CreateUserModel): User {
-        val id = userQueries.transactionWithResult {
-            userQueries.insertUser(
-                user.email,
-                HashUtil.hashPassword(user.password),
-                user.firstName,
-                user.lastName
-            )
+        try {
+            return userQueries.transactionWithResult {
+                userQueries.insertUser(
+                    user.email,
+                    HashUtil.hashPassword(user.password),
+                    user.firstName,
+                    user.lastName
+                )
 
-            userQueries.selectLastInsertedRowId().executeAsOne()
+                userQueries.selectLastInsertedRowId().executeAsOne()
+            }.let {
+                User.from(userQueries.selectById(it.toInt()).executeAsOne())
+            }
+        } catch (ex: SQLIntegrityConstraintViolationException) {
+            // TODO: Throw UserRepositoryException
+            throw Exception("foo bar baz bax")
         }
-
-        return User.from(userQueries.selectById(id.toInt()).executeAsOne())
     }
 
+    // TODO (JT): Ensure null case is handled by replacing [mapToOne].
     override suspend fun queryUserById(id: Int): Flow<User> = userQueries
         .selectById(id)
         .asFlow()
