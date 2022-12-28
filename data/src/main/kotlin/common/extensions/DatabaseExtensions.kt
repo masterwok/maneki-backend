@@ -5,7 +5,9 @@ import com.squareup.sqldelight.sqlite.driver.JdbcDriver
 import com.squareup.sqldelight.sqlite.driver.asJdbcDriver
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import dev.maneki.Database
+import common.adapters.TimestampColumnAdapter
+import dev.maneki.data.Database
+import dev.maneki.data.User
 import io.ktor.server.application.*
 
 
@@ -16,7 +18,13 @@ fun Database.Companion.init(app: Application): Database {
 
     Schema.migrateIfRequired(driver)
 
-    return Database(driver)
+    return Database(
+        driver,
+        userAdapter = User.Adapter(
+            created_onAdapter = TimestampColumnAdapter,
+            updated_onAdapter = TimestampColumnAdapter,
+        )
+    )
 }
 
 private fun SqlDriver.Schema.migrateIfRequired(driver: JdbcDriver) {

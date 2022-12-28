@@ -1,4 +1,4 @@
-package dev.maneki.utils
+package common.utils
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 

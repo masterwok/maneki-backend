@@ -10,7 +10,7 @@ plugins {
 }
 
 
-group = "dev.maneki"
+group = "dev.maneki.data"
 version = "0.0.1"
 
 repositories {
@@ -20,7 +20,7 @@ repositories {
 sqldelight {
     database("Database") {
         dialect = "mysql"
-        packageName = "dev.maneki"
+        packageName = "dev.maneki.data"
         deriveSchemaFromMigrations = true
     }
 }
@@ -32,6 +32,11 @@ dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_core_version")
+
+    implementation("com.squareup.sqldelight:coroutines-extensions:$sqldelight_version")
+
+    // DateTimes
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     // JDBC driver
     implementation("com.squareup.sqldelight:jdbc-driver:$sqldelight_version")

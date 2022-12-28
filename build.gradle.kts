@@ -3,6 +3,7 @@ val kotlin_version: String by project
 val logback_version: String by project
 val sqldelight_version: String by project
 val mysql_connector_java_version: String by project
+val koin_version: String by project
 
 plugins {
     kotlin("jvm") version "1.7.20"
@@ -33,6 +34,9 @@ sqldelight {
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":data"))
+
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
@@ -46,8 +50,9 @@ dependencies {
     // DateTimes
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
-    implementation(project(":domain"))
-    implementation(project(":data"))
+    // Koin for Kotlin apps
+    implementation("io.insert-koin:koin-ktor:$koin_version")
+    implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

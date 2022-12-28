@@ -3,7 +3,7 @@ selectAllUsers:
 SELECT *
 FROM user;
 
-insertUserWith:
+insertUser:
 INSERT INTO user
 (
   email,
@@ -17,6 +17,13 @@ VALUES (
   :firstName,
   :lastName
 );
+
+selectLastInsertedRowId:
+SELECT last_insert_id();
+
+users:
+SELECT *
+FROM user;
 
 selectById:
 SELECT *
