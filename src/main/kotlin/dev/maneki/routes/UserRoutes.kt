@@ -26,16 +26,17 @@ fun Route.userRouting() {
         get("{id?}") {
             val id = call.parameters["id"]!!.toInt()
 
-            val user = queryUserById(id).first()
-
-            call.respond(UserDto.from(user))
+            queryUserById(id).first().also {
+                call.respond(UserDto.from(it))
+            }
         }
         post {
             val model = call.receive<CreateUserDto>().toCreateUserModel()
 
-            val user = createUser(model)
+            createUser(model).also {
+                call.respond(UserDto.from(it))
+            }
 
-            call.respond(UserDto.from(user))
         }
         delete("{id?}") {
 
