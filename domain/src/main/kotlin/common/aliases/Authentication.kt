@@ -1,11 +1,12 @@
 package common.aliases
 
-/**
- * Validate a JWT token.
- */
-typealias VerifyToken = (token: String) -> Boolean
+import features.authentication.models.Token
+import features.users.models.User
 
-/**
- * Create a JWT token.
- */
-typealias CreateToken = () -> String
+fun interface TokenValidator {
+    fun validate(token: String): Boolean
+}
+
+fun interface TokenFactory {
+    fun create(user: User): Token
+}

@@ -1,20 +1,30 @@
 package features.authentication.usecases
 
-import common.aliases.CreateToken
+import common.aliases.TokenFactory
 import common.usecases.CommandUseCaseWithParam
+import features.authentication.models.SetUserRefreshTokenModel
+import features.authentication.models.Token
 import features.users.repositories.UserRepository
+import kotlinx.coroutines.flow.first
 
 class Login(
-    private val createToken: CreateToken,
+    private val tokenFactory: TokenFactory,
     private val userRepository: UserRepository,
-) : CommandUseCaseWithParam<LoginParam, String?>() {
+    private val setUserRefreshToken: SetUserRefreshToken,
+) : CommandUseCaseWithParam<LoginParam, Token?>() {
 
-    override suspend fun invoke(param: LoginParam): String? {
+    override suspend fun invoke(param: LoginParam): Token? {
         val isValid = userRepository.validatePassword(param.email, param.password)
 
         if (!isValid) return null
 
-        return createToken()
+        val user = userRepository.queryUserByEmail(param.email).first() ?: return null
+        val token = tokenFactory.create(user)
+        val setUserRefreshTokenModel = SetUserRefreshTokenModel(user.id!!, token.refreshToken)
+
+        setUserRefreshToken(setUserRefreshTokenModel)
+
+        return token
     }
 }
 
