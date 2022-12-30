@@ -1,4 +1,4 @@
-package dev.maneki.common.extensions
+package common.extensions
 
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.sqlite.driver.JdbcDriver
@@ -7,6 +7,7 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import common.adapters.TimestampColumnAdapter
 import dev.maneki.data.Database
+import dev.maneki.data.Refresh_token
 import dev.maneki.data.User
 import io.ktor.server.application.*
 
@@ -20,6 +21,9 @@ fun Database.Companion.init(app: Application): Database {
 
     return Database(
         driver,
+        refresh_tokenAdapter = Refresh_token.Adapter(
+            expires_onAdapter = TimestampColumnAdapter,
+        ),
         userAdapter = User.Adapter(
             created_onAdapter = TimestampColumnAdapter,
             updated_onAdapter = TimestampColumnAdapter,

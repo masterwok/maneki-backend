@@ -19,6 +19,15 @@ CREATE TABLE user (
 CREATE INDEX user_id ON user(id);
 CREATE INDEX user_email ON user(email);
 
+CREATE TABLE refresh_token (
+  user_id INT NOT NULL PRIMARY KEY,
+  token CHAR(128) NOT NULL,
+  expires_on TIMESTAMP AS Instant NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+CREATE INDEX refresh_token_user_id ON refresh_token(user_id);
+
 INSERT INTO schema_version (version) VALUES (1);
 
 INSERT INTO user (

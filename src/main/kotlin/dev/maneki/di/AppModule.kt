@@ -2,7 +2,7 @@ package dev.maneki.di
 
 import common.aliases.CreateToken
 import common.aliases.VerifyToken
-import dev.maneki.common.extensions.init
+import common.extensions.init
 import dev.maneki.data.Database
 import dev.maneki.utils.JwtUtil
 import features.authentication.usecases.Login
