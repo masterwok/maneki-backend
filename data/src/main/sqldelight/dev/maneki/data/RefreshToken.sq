@@ -5,3 +5,9 @@ FROM user
     INNER JOIN refresh_token ON user_id = user.id
 WHERE user.email = ?;
 
+insertOrUpdate:
+INSERT INTO refresh_token
+VALUES ?
+ON DUPLICATE KEY UPDATE
+    token = VALUES(token),
+    expires_on = VALUES(expires_on);

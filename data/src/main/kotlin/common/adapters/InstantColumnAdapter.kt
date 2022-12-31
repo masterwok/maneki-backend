@@ -2,6 +2,7 @@ package common.adapters
 
 import com.squareup.sqldelight.ColumnAdapter
 import kotlinx.datetime.Instant
+import kotlinx.datetime.toJavaInstant
 import kotlinx.datetime.toKotlinInstant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatterBuilder
@@ -18,5 +19,7 @@ object TimestampColumnAdapter : ColumnAdapter<Instant, String> {
         java.time.Instant::from,
     ).toKotlinInstant()
 
-    override fun encode(value: Instant): String = value.toString()
+    override fun encode(value: Instant): String {
+        return dateTimeFormat.format(value.toJavaInstant())
+    }
 }

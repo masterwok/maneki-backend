@@ -1,6 +1,9 @@
 package features.authentication.models
 
+import kotlinx.datetime.Instant
+
 data class SetUserRefreshTokenModel(
     val userId: Int,
-    val refreshToken: RefreshToken,
+    val token: String,
+    val expiresOn: Instant,
 )

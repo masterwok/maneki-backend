@@ -19,12 +19,18 @@ class Login(
         if (!isValid) return null
 
         val user = userRepository.queryUserByEmail(param.email).first() ?: return null
-        val token = tokenFactory.create(user)
-        val setUserRefreshTokenModel = SetUserRefreshTokenModel(user.id!!, token.refreshToken)
+        val authToken = tokenFactory.create(user)
+        val setUserRefreshTokenModel = with(authToken.refreshToken) {
+            SetUserRefreshTokenModel(
+                user.id!!,
+                token,
+                expiresOn,
+            )
+        }
 
         setUserRefreshToken(setUserRefreshTokenModel)
 
-        return token
+        return authToken
     }
 }
 

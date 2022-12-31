@@ -4,11 +4,11 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import common.aliases.TokenFactory
 import common.aliases.TokenValidator
+import common.extensions.randomAlphaNumeric
 import features.authentication.models.RefreshToken
 import features.authentication.models.Token
 import features.users.models.User
 import kotlinx.datetime.Clock
-import java.security.SecureRandom
 import java.util.*
 import kotlin.time.Duration.Companion.days
 
@@ -19,25 +19,21 @@ object JwtUtil {
     private const val CLAIM_KEY_EMAIL = "email"
     private const val CLAIM_KEY_FIRST_NAME = "lastName"
     private const val CLAIM_KEY_LAST_NAME = "firstName"
+    private const val REFRESH_TOKEN_LENGTH = 50
 
     private val verifier = JWT
         .require(Algorithm.HMAC256(secret))
         .build()
-
-    private val secureRandom = SecureRandom()
-    private val base64Encoder = Base64.getEncoder()
 
     val secret: String
         get() = System.getenv("JWT_SECRET").apply {
             if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize database driver: JDBC_URL environment variable required (SQLite or MySQL).")
         }
 
-    private fun createRefreshToken(user: User) = with(ByteArray(128)) {
-        secureRandom.nextBytes(this)
-
-        RefreshToken(
+    private fun createRefreshToken(user: User): RefreshToken {
+        return RefreshToken(
             user.id!!,
-            base64Encoder.encodeToString(this),
+            String.randomAlphaNumeric(REFRESH_TOKEN_LENGTH),
             Clock.System.now().plus(refreshTokenExpirationDuration)
         )
     }

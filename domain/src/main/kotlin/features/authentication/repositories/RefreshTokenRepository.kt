@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface RefreshTokenRepository {
     fun queryRefreshTokenByUserEmail(email: String): Flow<RefreshToken?>
-    suspend fun setUserRefreshToken(param: SetUserRefreshTokenModel)
+    suspend fun setUserRefreshToken(setUserRefreshTokenModel: SetUserRefreshTokenModel)
 
 }
