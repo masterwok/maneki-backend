@@ -1,6 +1,5 @@
 package features.authentication.repositories
 
-import at.favre.lib.crypto.bcrypt.BCrypt
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import common.utils.HashUtil
