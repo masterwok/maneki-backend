@@ -3,11 +3,10 @@ package dev.maneki.features.authentication
 import dev.maneki.dtos.ApiResponse
 import dev.maneki.dtos.error
 import dev.maneki.dtos.success
-import dev.maneki.features.authentication.dtos.LoginRequestDto
-import dev.maneki.features.authentication.dtos.LoginResponseDto
-import dev.maneki.features.authentication.dtos.from
-import dev.maneki.features.authentication.dtos.toLoginModel
+import dev.maneki.features.authentication.dtos.*
+import features.authentication.models.Token
 import features.authentication.usecases.Login
+import features.authentication.usecases.RefreshAuthToken
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -17,18 +16,30 @@ import org.koin.ktor.ext.inject
 
 fun Routing.authRouting() {
     val login by inject<Login>()
+    val refreshAuthToken by inject<RefreshAuthToken>()
 
     route("/auth") {
 
-        get("refresh") {
-            // Handle GET request to /users/{id}
+        post("refresh") {
+            val refreshToken = call.receive<RefreshTokenRequestDto>().refreshToken
+
+            val result = try {
+                refreshAuthToken(refreshToken)
+            } catch (ex: Exception) {
+                ex
+            }
+
+            when (result) {
+                is Token -> call.respond(HttpStatusCode.OK, ApiResponse.success(LoginResponseDto.from(result)))
+                is Exception -> call.respond(HttpStatusCode.Unauthorized, ApiResponse.error(result.message!!))
+            }
         }
         post {
             val model = call.receive<LoginRequestDto>().toLoginModel()
 
-            when (val token = login(model)) {
+            when (val result = login(model)) {
                 null -> call.respond(HttpStatusCode.Unauthorized, ApiResponse.error("Unknown username or password."))
-                else -> call.respond(HttpStatusCode.OK, ApiResponse.success(LoginResponseDto.from(token)))
+                else -> call.respond(HttpStatusCode.OK, ApiResponse.success(LoginResponseDto.from(result)))
             }
         }
     }

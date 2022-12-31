@@ -6,7 +6,8 @@ import dev.maneki.utils.JwtUtil
 import features.authentication.repositories.RefreshTokenRepository
 import features.authentication.repositories.RefreshTokenRepositoryImpl
 import features.authentication.usecases.Login
-import features.authentication.usecases.QueryUserRefreshTokenByEmail
+import features.authentication.usecases.QueryUserRefreshToken
+import features.authentication.usecases.RefreshAuthToken
 import features.authentication.usecases.SetUserRefreshToken
 import features.users.repositories.UserRepository
 import features.users.repositories.UserRepositoryImpl
@@ -35,7 +36,8 @@ fun appModule(application: Application) = module {
     // Authentication
     single { JwtUtil.createToken }
     single { JwtUtil.validateToken }
-    single { QueryUserRefreshTokenByEmail(get()) }
+    single { QueryUserRefreshToken(get()) }
     single { Login(get(), get(), get()) }
     single { SetUserRefreshToken(get()) }
+    single { RefreshAuthToken(get(), get(), get(), get()) }
 }

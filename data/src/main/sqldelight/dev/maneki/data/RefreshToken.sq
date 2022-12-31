@@ -1,9 +1,8 @@
-selectByUserEmail:
+selectByToken:
 SELECT
-    refresh_token.*
-FROM user
-    INNER JOIN refresh_token ON user_id = user.id
-WHERE user.email = ?;
+    *
+FROM refresh_token
+WHERE refresh_token.token = ?;
 
 insertOrUpdate:
 INSERT INTO refresh_token

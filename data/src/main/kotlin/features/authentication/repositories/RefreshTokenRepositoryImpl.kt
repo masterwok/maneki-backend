@@ -1,8 +1,11 @@
 package features.authentication.repositories
 
+import at.favre.lib.crypto.bcrypt.BCrypt
+import com.squareup.sqldelight.Query
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import common.utils.HashUtil
+import dev.maneki.data.Database
 import dev.maneki.data.RefreshTokenQueries
 import dev.maneki.data.Refresh_token
 import features.authentication.models.RefreshToken
@@ -11,14 +14,15 @@ import features.users.extensions.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.withContext
 
 class RefreshTokenRepositoryImpl(
     private val refreshTokenQueries: RefreshTokenQueries,
 ) : RefreshTokenRepository {
-    override fun queryRefreshTokenByUserEmail(email: String): Flow<RefreshToken?> {
+    override fun queryRefreshToken(token: String): Flow<RefreshToken?> {
         return refreshTokenQueries
-            .selectByUserEmail(email)
+            .selectByToken(HashUtil.hash(token))
             .asFlow()
             .mapToOneOrNull()
             .map { entity -> entity?.let(RefreshToken::from) }
@@ -31,10 +35,12 @@ class RefreshTokenRepositoryImpl(
             refreshTokenQueries.insertOrUpdate(
                 Refresh_token(
                     userId,
-                    HashUtil.hashPassword(token),
+                    HashUtil.hash(token),
                     expiresOn
                 )
             )
         }
     }
 }
+
+

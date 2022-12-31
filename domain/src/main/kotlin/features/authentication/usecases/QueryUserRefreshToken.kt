@@ -5,10 +5,10 @@ import features.authentication.models.RefreshToken
 import features.authentication.repositories.RefreshTokenRepository
 import kotlinx.coroutines.flow.Flow
 
-class QueryUserRefreshTokenByEmail(
+class QueryUserRefreshToken(
     private val refreshTokenRepository: RefreshTokenRepository,
 ) : QueryUseCaseWithParam<String, RefreshToken?>() {
     override suspend fun invoke(param: String): Flow<RefreshToken?> {
-        return refreshTokenRepository.queryRefreshTokenByUserEmail(param);
+        return refreshTokenRepository.queryRefreshToken(param)
     }
 }

@@ -7,7 +7,7 @@ object HashUtil {
     private val bcrypt by lazy { BCrypt.withDefaults() }
     private val verifier by lazy { BCrypt.verifyer() }
 
-    fun hashPassword(
+    fun hash(
         password: String,
         cost: Int = 12
     ): String = bcrypt.hashToString(cost, password.toCharArray())
