@@ -22,7 +22,7 @@ class Login(
         val authToken = tokenFactory.create(user)
         val setUserRefreshTokenModel = with(authToken.refreshToken) {
             SetUserRefreshTokenModel(
-                user.id!!,
+                user.id,
                 token,
                 expiresOn,
             )

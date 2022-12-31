@@ -23,7 +23,7 @@ class RefreshAuthToken(
 
         setUserRefreshToken(
             SetUserRefreshTokenModel(
-                user.id!!,
+                user.id,
                 newToken.refreshToken.token,
                 newToken.refreshToken.expiresOn
             )

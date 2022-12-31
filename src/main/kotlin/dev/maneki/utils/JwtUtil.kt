@@ -32,7 +32,7 @@ object JwtUtil {
 
     private fun createRefreshToken(user: User): RefreshToken {
         return RefreshToken(
-            user.id!!,
+            user.id,
             String.randomAlphaNumeric(REFRESH_TOKEN_LENGTH),
             Clock.System.now().plus(refreshTokenExpirationDuration)
         )
