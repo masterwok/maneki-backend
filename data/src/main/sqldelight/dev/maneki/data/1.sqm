@@ -2,8 +2,7 @@ import kotlinx.datetime.Instant;
 
 
 CREATE TABLE schema_version (
-  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  version INT NOT NULL UNIQUE
+  version INT NOT NULL PRIMARY KEY
 );
 
 CREATE TABLE user (
