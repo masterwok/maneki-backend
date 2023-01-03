@@ -27,7 +27,7 @@ object JwtUtil {
 
     val secret: String
         get() = System.getenv("JWT_SECRET").apply {
-            if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize database driver: JDBC_URL environment variable required (SQLite or MySQL).")
+            if (isNullOrEmpty()) throw IllegalArgumentException("Failed to find JWT_SECRET environment variable required to sign tokens.")
         }
 
     private fun createRefreshToken(user: User): RefreshToken {
