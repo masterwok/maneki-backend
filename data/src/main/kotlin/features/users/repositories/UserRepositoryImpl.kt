@@ -23,7 +23,7 @@ class UserRepositoryImpl(
             return userQueries.transactionWithResult {
                 userQueries.insertUser(
                     user.email,
-                    HashUtil.hash(user.password),
+                    HashUtil.hashPassword(user.password),
                     user.firstName,
                     user.lastName
                 )

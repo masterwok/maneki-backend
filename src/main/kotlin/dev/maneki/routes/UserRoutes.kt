@@ -8,6 +8,7 @@ import features.users.usecases.CreateUser
 import features.users.usecases.QueryUserById
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -19,17 +20,19 @@ fun Route.userRouting() {
     val queryUserById by inject<QueryUserById>()
 
     route("user") {
-        get("{id?}") {
-            val id = call.parameters["id"]?.toIntOrNull()
+        authenticate {
+            get("{id?}") {
+                val id = call.parameters["id"]?.toIntOrNull()
 
-            if (id == null) {
-                call.respond(HttpStatusCode.BadRequest, ApiResponse.error("Invalid id parameter"))
-                return@get
-            }
+                if (id == null) {
+                    call.respond(HttpStatusCode.BadRequest, ApiResponse.error("Invalid id parameter"))
+                    return@get
+                }
 
-            when (val result = queryUserById(id).firstOrNull()) {
-                is User -> call.respond(ApiResponse.success(UserDto.from(result)))
-                null -> call.respond(HttpStatusCode.NotFound, ApiResponse.error("User not found"))
+                when (val result = queryUserById(id).firstOrNull()) {
+                    is User -> call.respond(ApiResponse.success(UserDto.from(result)))
+                    null -> call.respond(HttpStatusCode.NotFound, ApiResponse.error("User not found"))
+                }
             }
         }
         post {

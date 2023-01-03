@@ -20,7 +20,7 @@ CREATE INDEX user_email ON user(email);
 
 CREATE TABLE refresh_token (
   user_id INT NOT NULL PRIMARY KEY,
-  token VARCHAR(60) NOT NULL,
+  token CHAR(64) NOT NULL,
   expires_on TIMESTAMP AS Instant NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user(id)
 );
