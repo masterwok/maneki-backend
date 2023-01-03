@@ -4,7 +4,7 @@ A Ktor backend using clean architecture. SQLDelight is used to interface with My
 
 **Environment variables required by the backend:**
 
-- JWT_SECRET, the secret used to sign JWT
-- JDBC_URL, the URL of the MySQL database
-- MYSQL_USER, the MySQL username
-- MYSQL_PASSWORD, the MySQL password
+- `JWT_SECRET`, the secret used to sign JWT
+- `JDBC_URL`, the URL of the MySQL database
+- `MYSQL_USER`, the MySQL username
+- `MYSQL_PASSWORD`, the MySQL password
