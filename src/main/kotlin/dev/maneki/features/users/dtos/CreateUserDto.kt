@@ -1,4 +1,4 @@
-package dev.maneki.dtos
+package dev.maneki.features.users.dtos
 
 import features.users.models.CreateUserModel
 import kotlinx.serialization.Serializable
