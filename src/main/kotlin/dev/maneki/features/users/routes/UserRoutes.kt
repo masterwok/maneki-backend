@@ -1,6 +1,8 @@
 package dev.maneki.features.users.routes
 
-import dev.maneki.dtos.*
+import dev.maneki.dtos.ApiResponse
+import dev.maneki.dtos.error
+import dev.maneki.dtos.success
 import dev.maneki.extensions.requireUserEmail
 import dev.maneki.features.users.dtos.CreateUserDto
 import dev.maneki.features.users.dtos.UserDto
@@ -14,7 +16,6 @@ import features.users.usecases.QueryUserByEmail
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -32,6 +33,9 @@ fun Route.getUserInfoRoute() {
     val queryUserByEmail by inject<QueryUserByEmail>()
 
     authenticate {
+        /**
+         * Get the user information of the user.
+         */
         get {
             when (val result = queryUserByEmail(requireUserEmail).firstOrNull()) {
                 is User -> call.respond(ApiResponse.success(UserDto.from(result)))
@@ -43,6 +47,10 @@ fun Route.getUserInfoRoute() {
 
 fun Route.createUserRoute() {
     val createUser by inject<CreateUser>()
+
+    /**
+     * Create a new user account.
+     */
     post {
         val model = call.receive<CreateUserDto>().toCreateUserModel()
 

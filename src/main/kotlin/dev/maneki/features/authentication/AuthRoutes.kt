@@ -24,6 +24,9 @@ fun Routing.authRouting() {
 fun Route.loginRoute() {
     val login by inject<Login>()
 
+    /**
+     * Login to the application.
+     */
     post {
         val model = call.receive<LoginRequestDto>().toLoginModel()
 
@@ -37,6 +40,9 @@ fun Route.loginRoute() {
 fun Route.refreshRoute() {
     val refreshAuthToken by inject<RefreshAuthToken>()
 
+    /**
+     * Refresh the authentication access token.
+     */
     post("refresh") {
         val refreshToken = call.receive<RefreshTokenRequestDto>().refreshToken
 
