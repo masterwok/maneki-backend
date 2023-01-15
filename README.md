@@ -1,3 +1,5 @@
+[![Deploy to Azure](https://github.com/masterwok/maneki-backend/actions/workflows/main.yml/badge.svg)](https://github.com/masterwok/maneki-backend/actions/workflows/main.yml)
+
 # Maneki Backend
 
 A Ktor backend using clean architecture. SQLDelight is used to interface with MySQL. JWT is used for authentication.
