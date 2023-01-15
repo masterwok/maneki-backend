@@ -14,6 +14,7 @@ plugins {
 
 group = "dev.maneki"
 version = "0.0.1"
+
 application {
     mainClass.set("dev.maneki.ApplicationKt")
 
@@ -21,16 +22,14 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
-repositories {
-    mavenCentral()
+ktor {
+    fatJar {
+        archiveFileName.set("app.jar")
+    }
 }
 
-sqldelight {
-    database("Database") {
-        dialect = "mysql"
-        packageName = "dev.maneki"
-        deriveSchemaFromMigrations = true
-    }
+repositories {
+    mavenCentral()
 }
 
 dependencies {
