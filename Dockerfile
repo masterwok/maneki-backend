@@ -6,5 +6,5 @@ RUN gradle buildFatJar --no-daemon
 FROM openjdk:11
 EXPOSE 80:80
 RUN mkdir /app
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/app.jar
+COPY --from=build /home/gradle/src/build/libs/app.jar /app/app.jar
 ENTRYPOINT ["java","-jar","/app/app.jar"]
