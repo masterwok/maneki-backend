@@ -66,7 +66,7 @@ private fun createMySqlDatabaseDriver(): JdbcDriver {
         password = System.getenv("MYSQL_PASSWORD").apply {
             if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize MySQL driver: MYSQL_USER environment variable required.")
         }
-        driverClassName = "com.mysql.jdbc.Driver"
+        driverClassName = "com.mysql.cj.jdbc.Driver"
         connectionTestQuery = "SELECT 1"
         poolName = "MySqlPool"
         maximumPoolSize = 50
