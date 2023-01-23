@@ -9,7 +9,6 @@ plugins {
     kotlin("jvm") version "1.7.20"
     id("io.ktor.plugin") version "2.2.1"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.20"
-    id("com.squareup.sqldelight") version "1.5.4"
 }
 
 group = "dev.maneki"

@@ -6,7 +6,7 @@ val kotlinx_coroutines_core_version: String by project
 
 plugins {
     kotlin("jvm") version "1.7.20"
-    id("com.squareup.sqldelight") version "1.5.4"
+    id("com.squareup.sqldelight") version "1.5.5"
 }
 
 
