@@ -1,6 +1,7 @@
 package dev.maneki.plugins
 
 import dev.maneki.features.authentication.authRouting
+import dev.maneki.features.example.exampleRouting
 import dev.maneki.features.health.routes.healthRouting
 import dev.maneki.features.users.routes.userRouting
 import io.ktor.server.application.*
@@ -11,5 +12,6 @@ fun Application.configureRouting() {
         healthRouting()
         userRouting()
         authRouting()
+        exampleRouting()
     }
 }

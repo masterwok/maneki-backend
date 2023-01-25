@@ -7,16 +7,19 @@ import io.ktor.server.netty.*
 
 fun main() {
     embeddedServer(
-        Netty, port = 80,
+        Netty,
+        port = 80,
         host = "0.0.0.0",
         module = Application::module
     ).start(wait = true)
 }
 
 fun Application.module() {
+    configureCors()
+    configureResources()
     configureKoin()
     configureSecurity()
-    configureHTTP()
+    configureSwagger()
     configureMonitoring()
     configureSerialization()
     configureRouting()
