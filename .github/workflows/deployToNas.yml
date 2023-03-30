@@ -56,10 +56,6 @@ jobs:
           echo "Run new container"
           docker run \
             -d \
-            -e JDBC_URL="${{ secrets.JDBC_URL }}" \
-            -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
-            -e MYSQL_USER="${{ secrets.MYSQL_USER }}" \
-            -e MYSQL_PASSWORD="${{ secrets.MYSQL_PASSWORD }}" \           
             --name="${{ env.APP_NAME }}" \
             --restart on-failure:3 \
             --log-opt max-size=5m \
@@ -67,5 +63,8 @@ jobs:
             ghcr.io/${{ env.IMAGE_TAG }}
 
         
-
+            #-e JDBC_URL="${{ secrets.JDBC_URL }}" \
+            #-e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+            #-e MYSQL_USER="${{ secrets.MYSQL_USER }}" \
+            #-e MYSQL_PASSWORD="${{ secrets.MYSQL_PASSWORD }}" \           
       
