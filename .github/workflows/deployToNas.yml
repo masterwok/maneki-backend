@@ -40,6 +40,7 @@ jobs:
         pass: ${{ secrets.SYNOLOGY_PASSWORD }}  
         run: |
           export PATH="$PATH:/usr/local/bin"
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u "${{ github.actor }}" --password-stdin
           docker pull docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }}
           docker tag docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }} ${{ env.IMAGE_TAG }}
           docker rm -f maneki || true
