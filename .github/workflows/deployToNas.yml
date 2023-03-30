@@ -50,10 +50,10 @@ jobs:
           docker pull ghcr.io/${{ env.IMAGE_TAG }}
           
           echo "Stop running container"
-          docker stop $APP_NAME || true
+          docker stop ${{ env.APP_NAME }} || true
 
           echo "Remove old container"
-          docker rm $APP_NAME || true
+          docker rm ${{ env.APP_NAME }} || true
 
           echo "Run new container"
           docker run \
@@ -62,8 +62,8 @@ jobs:
             -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
             -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
             -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \           
-            --name=$APP_NAME \
-            --restart unless-stopped \
+            --name=${{ env.APP_NAME }} \
+            --restart on-failure:3 \
             --log-opt max-size=5m \
             --log-opt max-file=3 \
             ghcr.io/${{ env.IMAGE_TAG }}
