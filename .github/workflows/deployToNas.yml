@@ -42,6 +42,7 @@ jobs:
         run: |
           export PATH="$PATH:/usr/local/bin"
           
+          echo "Logging into ghcr.io"
           echo "${{ secrets.GITHUB_TOKEN }}" |  docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker pull ghcr.io/${{ github.actor }}/${{ github.repository }}:${{ github.sha }}
           
@@ -59,13 +60,7 @@ jobs:
             --log-opt max-size=5m \
             --log-opt max-file=3 \
             ghcr.io/${{ github.actor }}/${{ github.repository }}:${{ github.sha }}
+
         
-#          export PATH="$PATH:/usr/local/bin"
-#          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u "${{ github.actor }}" --password-stdin
-#          docker pull docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }}
-#          docker tag docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }} ${{ env.IMAGE_TAG }}
- #         docker rm -f maneki || true
- #         docker run -d -p 2000:2000--name=maneki -e ENV_VAR1=value1 -e ENV_VAR2=value2 ${{ env.IMAGE_TAG }}
- 
 
       
