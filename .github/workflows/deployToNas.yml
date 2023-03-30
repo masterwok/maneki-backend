@@ -37,8 +37,8 @@ jobs:
         port: 2222 #${{ secrets.SSH_PORT }}
         user: ${{ secrets.SYNOLOGY_USERNAME }}
         host: ${{ secrets.SYNOLOGY_HOST }}
-        password: ${{ secrets.SYNOLOGY_PASSWORD }}  
-        command: |
+        pass: ${{ secrets.SYNOLOGY_PASSWORD }}  
+        run: |
           docker pull docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }}
           docker tag docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }} ${{ env.IMAGE_TAG }}
           docker rm -f maneki || true
