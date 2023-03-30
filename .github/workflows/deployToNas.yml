@@ -44,6 +44,8 @@ jobs:
           
           echo "Logging into ghcr.io"
           echo "${{ secrets.GITHUB_TOKEN }}" |  docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          
+          echo "Pulling docker container ghcr.io/${{ github.actor }}/${{ github.repository }}:${{ github.sha }}"
           docker pull ghcr.io/${{ github.actor }}/${{ github.repository }}:${{ github.sha }}
           
           echo "Stop running container"
