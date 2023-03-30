@@ -40,6 +40,8 @@ jobs:
         host: ${{ secrets.SYNOLOGY_HOST }}
         pass: ${{ secrets.SYNOLOGY_PASSWORD }}  
         run: |
+          export PATH="$PATH:/usr/local/bin"
+          
           echo "${{ secrets.GITHUB_TOKEN }}" |  docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker pull ghcr.io/${{ github.actor }}/${{ github.repository }}:${{ github.sha }}
           
