@@ -30,13 +30,26 @@ jobs:
       run: |
         docker build -t docker.pkg.github.com/masterwok/maneki-backend/${{ env.IMAGE_TAG }} .
         docker push docker.pkg.github.com/masterwok/maneki-backend/${{ env.IMAGE_TAG }}
-        
     - name: Load Docker image on Synology NAS
-      run: |
-        sshpass -p "${{ secrets.SYNOLOGY_PASSWORD }}" ssh -p 2222 ${{ secrets.SYNOLOGY_USERNAME }}@${{ secrets.SYNOLOGY_HOST }} "docker pull docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }}"
-        sshpass -p "${{ secrets.SYNOLOGY_PASSWORD }}" ssh -p 2222 ${{ secrets.SYNOLOGY_USERNAME }}@${{ secrets.SYNOLOGY_HOST }} "docker tag docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }} ${{ env.IMAGE_TAG }}"
-        sshpass -p "${{ secrets.SYNOLOGY_PASSWORD }}" ssh -p 2222 ${{ secrets.SYNOLOGY_USERNAME }}@${{ secrets.SYNOLOGY_HOST }} "docker rm -f maneki || true"
-        sshpass -p "${{ secrets.SYNOLOGY_PASSWORD }}" ssh -p 2222 ${{ secrets.SYNOLOGY_USERNAME }}@${{ secrets.SYNOLOGY_HOST }} "docker run -d -p 2000:2000--name=maneki -e ENV_VAR1=value1 -e ENV_VAR2=value2 ${{ env.IMAGE_TAG }}"
+      uses: matheusvanzan/sshpass-action@v2
+      with:
+        #ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-port: 2222 #${{ secrets.SSH_PORT }}
+        ssh-user: ${{ secrets.SYNOLOGY_USERNAME }}
+        ssh-host: ${{ secrets.SYNOLOGY_HOST }}
+        ssh-password: ${{ secrets.SYNOLOGY_PASSWORD }}  
+        command: |
+          docker pull docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }}
+          docker tag docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }} ${{ env.IMAGE_TAG }}
+          docker rm -f maneki || true
+          docker run -d -p 2000:2000--name=maneki -e ENV_VAR1=value1 -e ENV_VAR2=value2 ${{ env.IMAGE_TAG }}
+      
+    #- name: Load Docker image on Synology NAS
+    #  run: |
+    #    sshpass -p "${{ secrets.SYNOLOGY_PASSWORD }}" ssh -p 2222 ${{ secrets.SYNOLOGY_USERNAME }}@${{ secrets.SYNOLOGY_HOST }} "docker pull docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }}"
+    #    sshpass -p "${{ secrets.SYNOLOGY_PASSWORD }}" ssh -p 2222 ${{ secrets.SYNOLOGY_USERNAME }}@${{ secrets.SYNOLOGY_HOST }} "docker tag docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }} ${{ env.IMAGE_TAG }}"
+    #    sshpass -p "${{ secrets.SYNOLOGY_PASSWORD }}" ssh -p 2222 ${{ secrets.SYNOLOGY_USERNAME }}@${{ secrets.SYNOLOGY_HOST }} "docker rm -f maneki || true"
+    #    sshpass -p "${{ secrets.SYNOLOGY_PASSWORD }}" ssh -p 2222 ${{ secrets.SYNOLOGY_USERNAME }}@${{ secrets.SYNOLOGY_HOST }} "docker run -d -p 2000:2000--name=maneki -e ENV_VAR1=value1 -e ENV_VAR2=value2 ${{ env.IMAGE_TAG }}"
 
 
    
