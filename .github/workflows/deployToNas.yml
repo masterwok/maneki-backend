@@ -16,14 +16,15 @@ jobs:
     - name: Login to Docker Hub
       uses: docker/login-action@v1
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
 
     - name: Build Docker image
-      run: docker build -t myapp .
+      run: docker build -t maneki .
 
     - name: Tag Docker image
-      run: docker tag myapp ${DOCKER_USERNAME}/myapp:${{ github.sha }}
+      run: docker tag maneki ${REGISTRY_USERNAME}/maneki:${{ github.sha }}
 
     - name: Push Docker image
       uses: docker/build-push-action@v2
@@ -31,17 +32,10 @@ jobs:
         context: .
         push: true
         tags: |
-          ${DOCKER_USERNAME}/myapp:latest
-          ${DOCKER_USERNAME}/myapp:${{ github.sha }}
+          ${DOCKER_USERNAME}/maneki:latest
+          ${DOCKER_USERNAME}/maneki:${{ github.sha }}
 
     - name: Install SSH client
       run: sudo apt-get update && sudo apt-get install -y openssh-client
 
-    - name: Deploy to Synology NAS
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.SYNOLOGY_HOST }}
-        username: ${{ secrets.SYNOLOGY_USERNAME }}
-        password: ${{ secrets.SYNOLOGY_PASSWORD }}
-        source: "${{ github.workspace }}/docker-compose.yml"
-        target: "/volume1/docker/myapp/docker-compose.yml"
+
