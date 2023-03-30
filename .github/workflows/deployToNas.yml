@@ -23,7 +23,7 @@ jobs:
       run: docker build -t maneki .
 
     - name: Tag Docker image
-      run: docker tag maneki ${{ REGISTRY_USERNAME }}/maneki:${{ github.sha }}
+      run: docker tag maneki ${{ secrets.REGISTRY_USERNAME }}/maneki:${{ github.sha }}
 
     - name: Push Docker image
       uses: docker/build-push-action@v2
@@ -31,8 +31,8 @@ jobs:
         context: .
         push: true
         tags: |
-          ${ REGISTRY_USERNAME }}/maneki:latest
-          ${{ REGISTRY_PASSWORD }}/maneki:${{ github.sha }}
+          ${{ secrets.REGISTRY_USERNAME }}/maneki:latest
+          ${{ secrets.REGISTRY_PASSWORD }}/maneki:${{ github.sha }}
 
     - name: Install SSH client
       run: sudo apt-get update && sudo apt-get install -y openssh-client
