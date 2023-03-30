@@ -39,6 +39,7 @@ jobs:
         host: ${{ secrets.SYNOLOGY_HOST }}
         pass: ${{ secrets.SYNOLOGY_PASSWORD }}  
         run: |
+          export PATH="$PATH:/usr/local/bin"
           docker pull docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }}
           docker tag docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }} ${{ env.IMAGE_TAG }}
           docker rm -f maneki || true
