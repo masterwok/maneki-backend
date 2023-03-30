@@ -31,33 +31,39 @@ jobs:
         context: .
         push: true
         tags: ghcr.io/${{ github.repository }}:${{ github.sha }}       
-            
-#    - name: Login to GitHub Packages
-#      uses: docker/login-action@v1
-#      with:
-#        registry: docker.pkg.github.com
-#        username: ${{ github.actor }}
-#        password: ${{ secrets.GITHUB_TOKEN }}
 
-#    - name: Build and push Docker image
-#      run: |
-#        docker build -t docker.pkg.github.com/masterwok/maneki-backend/${{ env.IMAGE_TAG }} .
-#        docker push docker.pkg.github.com/masterwok/maneki-backend/${{ env.IMAGE_TAG }}
+    - name: Load Docker image on Synology NAS
+      uses: matheusvanzan/sshpass-action@v2
+      with:
+        port: 2222
+        user: ${{ secrets.SYNOLOGY_USERNAME }}
+        host: ${{ secrets.SYNOLOGY_HOST }}
+        pass: ${{ secrets.SYNOLOGY_PASSWORD }}  
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" |  docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker pull ghcr.io/${{ github.actor }}/${{ github.repository }}:${{ github.sha }}
+          
+          echo "Stop running container"
+          docker stop my-app || true
+
+          echo "Remove old container"
+          docker rm my-app || true
+
+          echo "Run new container"
+          docker run \
+            -d \
+            --name=my-app \
+            --restart unless-stopped \
+            --log-opt max-size=5m \
+            --log-opt max-file=3 \
+            ghcr.io/${{ github.actor }}/${{ github.repository }}:${{ github.sha }}
         
-
-#    - name: Load Docker image on Synology NAS
-#      uses: matheusvanzan/sshpass-action@v2
-#      with:
-#        #ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-#        port: 2222 #${{ secrets.SSH_PORT }}
-#        user: ${{ secrets.SYNOLOGY_USERNAME }}
-#        host: ${{ secrets.SYNOLOGY_HOST }}
-#        pass: ${{ secrets.SYNOLOGY_PASSWORD }}  
-#        run: |
 #          export PATH="$PATH:/usr/local/bin"
 #          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u "${{ github.actor }}" --password-stdin
 #          docker pull docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }}
 #          docker tag docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }} ${{ env.IMAGE_TAG }}
  #         docker rm -f maneki || true
  #         docker run -d -p 2000:2000--name=maneki -e ENV_VAR1=value1 -e ENV_VAR2=value2 ${{ env.IMAGE_TAG }}
+ 
+
       
