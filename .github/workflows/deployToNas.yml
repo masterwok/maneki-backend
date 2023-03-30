@@ -34,10 +34,10 @@ jobs:
       uses: matheusvanzan/sshpass-action@v2
       with:
         #ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        ssh-port: 2222 #${{ secrets.SSH_PORT }}
-        ssh-user: ${{ secrets.SYNOLOGY_USERNAME }}
-        ssh-host: ${{ secrets.SYNOLOGY_HOST }}
-        ssh-password: ${{ secrets.SYNOLOGY_PASSWORD }}  
+        port: 2222 #${{ secrets.SSH_PORT }}
+        user: ${{ secrets.SYNOLOGY_USERNAME }}
+        host: ${{ secrets.SYNOLOGY_HOST }}
+        password: ${{ secrets.SYNOLOGY_PASSWORD }}  
         command: |
           docker pull docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }}
           docker tag docker.pkg.github.com/masterwok/maneki-dev/${{ env.IMAGE_TAG }} ${{ env.IMAGE_TAG }}
