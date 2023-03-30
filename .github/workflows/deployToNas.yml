@@ -6,7 +6,8 @@ on:
       - main
 
 env:
-  IMAGE_TAG: maneki:${{ github.sha }}
+  IMAGE_TAG: ${{ github.repository }}:${{ github.sha }}
+  APP_NAME: maneki
 
 jobs:
   deploy:
@@ -30,7 +31,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: ghcr.io/${{ github.repository }}:${{ github.sha }}       
+        tags: ghcr.io/$IMAGE_TAG     
 
     - name: Load Docker image on Synology NAS
       uses: matheusvanzan/sshpass-action@v2
@@ -45,23 +46,27 @@ jobs:
           echo "Logging into ghcr.io"
           echo "${{ secrets.GITHUB_TOKEN }}" |  docker login ghcr.io -u ${{ github.actor }} --password-stdin
           
-          echo "Pulling docker container ghcr.io/${{ github.repository }}:${{ github.sha }}"
-          docker pull ghcr.io/${{ github.repository }}:${{ github.sha }}
+          echo "Pulling docker container ghcr.io/$IMAGE_TAG"
+          docker pull ghcr.io/$IMAGE_TAG
           
           echo "Stop running container"
-          docker stop maneki || true
+          docker stop $APP_NAME || true
 
           echo "Remove old container"
-          docker rm maneki || true
+          docker rm $APP_NAME || true
 
           echo "Run new container"
           docker run \
             -d \
-            --name=maneki \
+            -e JDBC_URL=${{ secrets.JDBC_URL }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
+            -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \           
+            --name=$APP_NAME \
             --restart unless-stopped \
             --log-opt max-size=5m \
             --log-opt max-file=3 \
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/$IMAGE_TAG
 
         
 
