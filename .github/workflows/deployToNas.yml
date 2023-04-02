@@ -57,15 +57,12 @@ jobs:
           docker run \
             -d \
             --name="${{ env.APP_NAME }}" \
-            --restart on-failure:3 \
+            --restart=on-failure:3 \
             --log-opt max-size=5m \
             --log-opt max-file=3 \
-            --env 'JDBC_URL="${{ secrets.JDBC_URL }}"' \
-            --env 'JWT_SECRET="${{ secrets.JWT_SECRET }}"' \
-            --env 'MYSQL_USER="${{ secrets.MYSQL_USER }}"' \
-            --env 'MYSQL_PASSWORD="${{ secrets.MYSQL_PASSWORD }}"' \   
+            -e JDBC_URL="${{ secrets.JDBC_URL }}" \
+            -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+            -e MYSQL_USER="${{ secrets.MYSQL_USER }}" \
+            -e MYSQL_PASSWORD="${{ secrets.MYSQL_PASSWORD }}" \
             ghcr.io/${{ env.IMAGE_TAG }}
-
-        
-        
       
