@@ -38,9 +38,12 @@ dependencies {
     // DateTimes
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
-    // JDBC driver
+    // MySQL JDBC driver
     implementation("com.squareup.sqldelight:jdbc-driver:$sqldelight_version")
     runtimeOnly("mysql:mysql-connector-java:$mysql_connector_java_version")
+
+    // MariaDB JDBC driver
+    implementation("org.mariadb.jdbc:mariadb-java-client:2.7.4")
 
     // Hikari JDBC connection pool
     implementation("com.zaxxer:HikariCP:5.0.1")

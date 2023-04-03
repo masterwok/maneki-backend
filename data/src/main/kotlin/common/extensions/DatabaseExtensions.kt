@@ -11,6 +11,10 @@ import dev.maneki.data.Refresh_token
 import dev.maneki.data.User
 import io.ktor.server.application.*
 
+private const val JDBC_MYSQL = "mysql"
+private const val JDBC_MARIADB = "mariadb"
+private const val DRIVER_CLASS_MYSQL = "com.mysql.cj.jdbc.Driver"
+private const val DRIVER_CLASS_MARIADB = "org.mariadb.jdbc.Driver"
 
 fun Database.Companion.init(app: Application): Database {
     val driver = createMySqlDatabaseDriver().apply {
@@ -55,18 +59,26 @@ private fun getCurrentSchemaVersion(driver: JdbcDriver): Int = driver.let {
     } + 1
 }
 
+private fun getDriverNameByJdbcUrl(jdbcUrl: String): String = when {
+    jdbcUrl.contains(JDBC_MYSQL) -> DRIVER_CLASS_MYSQL
+    jdbcUrl.contains(JDBC_MARIADB) -> DRIVER_CLASS_MARIADB
+    else -> throw IllegalArgumentException("Failed to initialize database driver: JDBC_URL environment variable must be either mysql or mariadb")
+}
+
 private fun createMySqlDatabaseDriver(): JdbcDriver {
+    val jdbcUrl = System.getenv("JDBC_URL").apply {
+        if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize database driver: JDBC_URL environment variable required (SQLite or MySQL).")
+    }
+
     return HikariDataSource(HikariConfig().apply {
-        jdbcUrl = System.getenv("JDBC_URL").apply {
-            if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize database driver: JDBC_URL environment variable required (SQLite or MySQL).")
-        }
+        this.jdbcUrl = jdbcUrl
         username = System.getenv("MYSQL_USER").apply {
             if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize MySQL driver: MYSQL_USER environment variable required.")
         }
         password = System.getenv("MYSQL_PASSWORD").apply {
             if (isNullOrEmpty()) throw IllegalArgumentException("Failed to initialize MySQL driver: MYSQL_USER environment variable required.")
         }
-        driverClassName = "com.mysql.cj.jdbc.Driver"
+        this.driverClassName = getDriverNameByJdbcUrl(jdbcUrl)
         connectionTestQuery = "SELECT 1"
         poolName = "MySqlPool"
         maximumPoolSize = 50
