@@ -34,7 +34,7 @@ jobs:
     - name: Load Docker image on Synology NAS
       uses: matheusvanzan/sshpass-action@v2
       with:
-        port: 2222
+        port: ${{ secrets.SSH_PORT }}
         user: ${{ secrets.SYNOLOGY_USERNAME }}
         host: ${{ secrets.SYNOLOGY_HOST }}
         pass: ${{ secrets.SYNOLOGY_PASSWORD }}  
