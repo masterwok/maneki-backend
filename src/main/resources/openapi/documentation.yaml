@@ -4,14 +4,14 @@ info:
   description: "maneki_backend API"
   version: "1.0.0"
 servers:
-- url: "https://maneki_backend"
+- url: "http://localhost:80"
 paths:
   /auth:
     post:
       description: "Login to the application."
       requestBody:
         content:
-          '*/*':
+          'application/json':
             schema:
               $ref: "#/components/schemas/LoginRequestDto"
         required: true

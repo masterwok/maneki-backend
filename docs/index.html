@@ -851,8 +851,8 @@
                           <div class="tab-pane active" id="examples-Default-authPost-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: */*"\
--H "Content-Type: */*"\
-"https://maneki_backend/auth"</code></pre>
+-H "Content-Type: application/json"\
+"http://localhost:80/auth"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-authPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1041,7 +1041,7 @@ except ApiException as e:
                                 $(document).ready(function() {
                                   var schemaWrapper = {
   "content" : {
-    "*/*" : {
+    "application/json" : {
       "schema" : {
         "$ref" : "#/components/schemas/LoginRequestDto"
       }
@@ -1049,7 +1049,7 @@ except ApiException as e:
   },
   "required" : true
 };
-                                  var schema = schemaWrapper.content["*/*"].schema;
+                                  var schema = schemaWrapper.content["application/json"].schema;
                                   if (schema.$ref != null) {
                                     schema = defsParser.$refs.get(schema.$ref);
                                   } else {
@@ -1208,7 +1208,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: */*"\
 -H "Content-Type: */*"\
-"https://maneki_backend/auth/refresh"</code></pre>
+"http://localhost:80/auth/refresh"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-authRefreshPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1563,7 +1563,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-healthStatusGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: */*"\
-"https://maneki_backend/health/status"</code></pre>
+"http://localhost:80/health/status"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-healthStatusGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1824,7 +1824,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-userGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: */*"\
-"https://maneki_backend/user"</code></pre>
+"http://localhost:80/user"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-userGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2128,7 +2128,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: */*"\
 -H "Content-Type: */*"\
-"https://maneki_backend/user"</code></pre>
+"http://localhost:80/user"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-userPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
