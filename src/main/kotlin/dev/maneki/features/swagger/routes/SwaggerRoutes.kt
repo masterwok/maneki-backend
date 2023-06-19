@@ -8,4 +8,5 @@ fun Routing.swaggerRouting() {
         path = "swagger",
         swaggerFile = "openapi/documentation.yaml",
     )
+
 }
