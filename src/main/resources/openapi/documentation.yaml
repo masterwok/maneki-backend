@@ -9,35 +9,60 @@ paths:
   /auth:
     post:
       description: "Login to the application."
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/LoginRequestDto"
+        required: true
       responses:
         "401":
           description: "Unauthorized"
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/Unit"
         "200":
           description: "OK"
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/LoginResponseDto"
   /auth/refresh:
     post:
       description: "Refresh the authentication access token."
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/RefreshTokenRequestDto"
+        required: true
       responses:
         "200":
           description: "OK"
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/LoginResponseDto"
         "401":
           description: "Unauthorized"
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/Unit"
+  /health/status:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "OK"
   /user:
     get:
       description: "Get the user information of the user."
@@ -47,51 +72,88 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/UserDto"
         "404":
           description: "Not Found"
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/Unit"
     post:
       description: "Create a new user account."
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/CreateUserDto"
+        required: true
       responses:
         "200":
           description: "OK"
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/UserDto"
         "409":
           description: "Conflict"
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                $ref: "#/components/schemas/Unit"
         "500":
           description: "Internal Server Error"
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/ApiResponse"
-  /json/kotlinx-serialization:
-    get:
-      description: ""
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/Map"
+                $ref: "#/components/schemas/Unit"
 components:
   schemas:
-    ApiResponse:
+    LoginRequestDto:
       type: "object"
       properties:
-        error:
+        email:
           type: "string"
-    Map:
+        password:
+          type: "string"
+    Unit:
       type: "object"
       properties: {}
+    LoginResponseDto:
+      type: "object"
+      properties:
+        token:
+          type: "string"
+        refreshToken:
+          type: "string"
+    RefreshTokenRequestDto:
+      type: "object"
+      properties:
+        refreshToken:
+          type: "string"
+    Instant:
+      type: "object"
+      properties: {}
+    UserDto:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        firstName:
+          type: "string"
+        lastName:
+          type: "string"
+        createdOn:
+          $ref: "#/components/schemas/Instant"
+        updatedOn:
+          $ref: "#/components/schemas/Instant"
+    CreateUserDto:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        firstName:
+          type: "string"
+        lastName:
+          type: "string"
+        password:
+          type: "string"
