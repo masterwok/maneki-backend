@@ -16,7 +16,6 @@ fun main() {
 }
 
 fun Application.module() {
-    configureCORS()
     configureKoin()
     configureSecurity()
     configureMonitoring()

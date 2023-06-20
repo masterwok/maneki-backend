@@ -40,13 +40,6 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
-
-    implementation("io.ktor:ktor-server-swagger:$ktor_version")
-    implementation("io.swagger.core.v3:swagger-core:2.2.12")
-    implementation("io.swagger.codegen.v3:swagger-codegen:3.0.45")
-
-    implementation("io.ktor:ktor-server-openapi:$ktor_version")
-    implementation("io.ktor:ktor-server-cors:$ktor_version")
     implementation("io.ktor:ktor-server-call-logging-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")

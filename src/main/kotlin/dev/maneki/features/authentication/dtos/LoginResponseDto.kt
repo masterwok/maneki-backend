@@ -15,3 +15,18 @@ fun LoginResponseDto.Companion.from(source: Token): LoginResponseDto = LoginResp
     source.token,
     source.refreshToken.token,
 )
+
+
+abstract class Common<T> {
+    abstract val data: T?
+    abstract val error: String?
+}
+
+data class FooData(
+    val name: String,
+)
+
+class Foo(
+    override val data: FooData?,
+    override val error: String? = null
+) : Common<FooData>()
