@@ -1,6 +1,6 @@
 package dev.maneki
 
-import dev.maneki.plugins.configureRouting
+import dev.maneki.plugins.installRouting
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -12,7 +12,7 @@ class ApplicationTest {
     @Test
     fun testRoot() = testApplication {
         application {
-            configureRouting()
+            installRouting()
         }
         client.get("/").apply {
             assertEquals(HttpStatusCode.OK, status)

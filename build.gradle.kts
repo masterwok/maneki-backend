@@ -43,6 +43,7 @@ dependencies {
     implementation("io.ktor:ktor-server-call-logging-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
 
     // DateTimes
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")

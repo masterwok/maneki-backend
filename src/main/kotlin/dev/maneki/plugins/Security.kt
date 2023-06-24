@@ -7,7 +7,7 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 
-fun Application.configureSecurity() {
+fun Application.installSecurity() {
 
     authentication {
         jwt {

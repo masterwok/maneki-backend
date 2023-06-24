@@ -6,7 +6,7 @@ import dev.maneki.features.users.routes.userRouting
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
-fun Application.configureRouting() {
+fun Application.installRouting() {
     routing {
         healthRouting()
         userRouting()

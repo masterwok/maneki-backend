@@ -16,10 +16,11 @@ fun main() {
 }
 
 fun Application.module() {
-    configureKoin()
-    configureSecurity()
-    configureMonitoring()
-    configureContentNegotiation()
-    configureRouting()
+    installKoin()
+    installSecurity()
+    installMonitoring()
+    installContentNegotiation()
+    installRouting()
+    installStatusPages()
 }
 
