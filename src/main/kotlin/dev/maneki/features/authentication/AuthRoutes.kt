@@ -32,7 +32,7 @@ fun Route.loginRoute() {
 
         when (val result = login(model)) {
             null -> call.respond(HttpStatusCode.Unauthorized, ApiResponse.error("Unknown username or password."))
-            else -> call.respond(HttpStatusCode.OK, ApiResponse.success(LoginResponseDto.from(result)))
+            else -> call.respond(HttpStatusCode.OK, LoginResponseDto.from(result))
         }
     }
 }
@@ -53,7 +53,7 @@ fun Route.refreshRoute() {
         }
 
         when (result) {
-            is Token -> call.respond(HttpStatusCode.OK, ApiResponse.success(LoginResponseDto.from(result)))
+            is Token -> call.respond(HttpStatusCode.OK, LoginResponseDto.from(result))
             is Exception -> call.respond(HttpStatusCode.Unauthorized, ApiResponse.error(result.message!!))
         }
     }

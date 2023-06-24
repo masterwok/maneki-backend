@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LoginRequestDto(
-    val email: String,
+    val username: String,
     val password: String
 ) {
     companion object
 }
 
-fun LoginRequestDto.toLoginModel(): LoginParam = LoginParam(email, password)
+fun LoginRequestDto.toLoginModel(): LoginParam = LoginParam(username, password)

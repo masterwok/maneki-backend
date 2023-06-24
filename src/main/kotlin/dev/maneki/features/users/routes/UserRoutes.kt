@@ -38,7 +38,7 @@ fun Route.getUserInfoRoute() {
          */
         get {
             when (val result = queryUserByEmail(requireUserEmail).firstOrNull()) {
-                is User -> call.respond(ApiResponse.success(UserDto.from(result)))
+                is User -> call.respond(UserDto.from(result))
                 null -> call.respond(HttpStatusCode.NotFound, ApiResponse.error("User not found"))
             }
         }
@@ -63,7 +63,7 @@ fun Route.createUserRoute() {
         }
 
         when (result) {
-            is User -> call.respond(ApiResponse.success(UserDto.from(result)))
+            is User -> call.respond(UserDto.from(result))
             is UserAlreadyExistsException -> call.respond(
                 HttpStatusCode.Conflict,
                 ApiResponse.error(result.message),
