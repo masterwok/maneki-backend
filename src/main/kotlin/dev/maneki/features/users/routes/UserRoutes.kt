@@ -1,8 +1,6 @@
 package dev.maneki.features.users.routes
 
-import dev.maneki.dtos.ApiResponse
-import dev.maneki.dtos.error
-import dev.maneki.dtos.success
+import dev.maneki.dtos.ApiErrorResponse
 import dev.maneki.extensions.requireUserEmail
 import dev.maneki.features.users.dtos.CreateUserDto
 import dev.maneki.features.users.dtos.UserDto
@@ -39,7 +37,7 @@ fun Route.getUserInfoRoute() {
         get {
             when (val result = queryUserByEmail(requireUserEmail).firstOrNull()) {
                 is User -> call.respond(UserDto.from(result))
-                null -> call.respond(HttpStatusCode.NotFound, ApiResponse.error("User not found"))
+                null -> call.respond(HttpStatusCode.NotFound, ApiErrorResponse("User not found"))
             }
         }
     }
@@ -66,12 +64,12 @@ fun Route.createUserRoute() {
             is User -> call.respond(UserDto.from(result))
             is UserAlreadyExistsException -> call.respond(
                 HttpStatusCode.Conflict,
-                ApiResponse.error(result.message),
+                ApiErrorResponse(result.message),
             )
 
             is CreateUserUnknownException -> call.respond(
                 HttpStatusCode.InternalServerError,
-                ApiResponse.error(result.message),
+                ApiErrorResponse(result.message),
             )
         }
     }

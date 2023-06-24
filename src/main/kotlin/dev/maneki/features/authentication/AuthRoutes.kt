@@ -1,8 +1,6 @@
 package dev.maneki.features.authentication
 
-import dev.maneki.dtos.ApiResponse
-import dev.maneki.dtos.error
-import dev.maneki.dtos.success
+import dev.maneki.dtos.ApiErrorResponse
 import dev.maneki.features.authentication.dtos.*
 import features.authentication.models.Token
 import features.authentication.usecases.Login
@@ -31,7 +29,7 @@ fun Route.loginRoute() {
         val model = call.receive<LoginRequestDto>().toLoginModel()
 
         when (val result = login(model)) {
-            null -> call.respond(HttpStatusCode.Unauthorized, ApiResponse.error("Unknown username or password."))
+            null -> call.respond(HttpStatusCode.Unauthorized, ApiErrorResponse("Unknown username or password."))
             else -> call.respond(HttpStatusCode.OK, LoginResponseDto.from(result))
         }
     }
@@ -54,7 +52,12 @@ fun Route.refreshRoute() {
 
         when (result) {
             is Token -> call.respond(HttpStatusCode.OK, LoginResponseDto.from(result))
-            is Exception -> call.respond(HttpStatusCode.Unauthorized, ApiResponse.error(result.message!!))
+            is Exception -> {
+                call.respond(
+                    HttpStatusCode.Unauthorized,
+                    ApiErrorResponse(result.message ?: "Unauthorized. Unable to complete your request.")
+                )
+            }
         }
     }
 }

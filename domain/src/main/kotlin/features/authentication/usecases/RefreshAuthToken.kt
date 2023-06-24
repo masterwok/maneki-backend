@@ -15,7 +15,7 @@ class RefreshAuthToken(
 ) : CommandUseCaseWithParam<String, Token>() {
     override suspend fun invoke(param: String): Token {
         val persistedRefreshToken = queryUserRefreshToken(param).firstOrNull()
-            ?: throw Exception("token doesn't exist")
+            ?: throw Exception("Token doesn't exist")
 
         val user = queryUserById(persistedRefreshToken.userId).firstOrNull()!!
 

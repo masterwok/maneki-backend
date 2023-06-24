@@ -1,7 +1,6 @@
 package dev.maneki.plugins
 
-import dev.maneki.dtos.ApiResponse
-import dev.maneki.dtos.error
+import dev.maneki.dtos.ApiErrorResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
@@ -10,15 +9,30 @@ import io.ktor.server.response.*
 fun Application.installStatusPages() {
     install(StatusPages) {
         status(HttpStatusCode.Unauthorized) { call, status ->
-            call.respond(status, ApiResponse.error("Unauthorized. Unable to complete your request."))
+            if (call.response.status() == null) {
+                call.respond(status, ApiErrorResponse("Unauthorized. Unable to complete your request."))
+            }
         }
 
         status(HttpStatusCode.BadRequest) { call, status ->
-            call.respond(status, ApiResponse.error("Invalid request. Please check your request and try again."))
+            if (call.response.status() == null) {
+                call.respond(status, ApiErrorResponse("Invalid request. Please check your request and try again."))
+            }
         }
 
         status(HttpStatusCode.InternalServerError) { call, status ->
-            call.respond(status, ApiResponse.error("Internal server error. Please try again later."))
+            if (call.response.status() == null) {
+                call.respond(status, ApiErrorResponse("Internal server error. Please try again later."))
+            }
+        }
+
+        exception<Throwable> { call, cause ->
+            if (call.response.status() == null) {
+                call.respond(
+                    HttpStatusCode.InternalServerError,
+                    ApiErrorResponse("Internal server error. Please try again later."),
+                )
+            }
         }
     }
 }
