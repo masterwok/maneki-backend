@@ -1,6 +1,6 @@
 package features.users.usecases
 
-import common.usecases.CommandUseCase
+import domain.usecases.CommandUseCase
 import features.users.models.User
 import features.users.repositories.UserRepository
 

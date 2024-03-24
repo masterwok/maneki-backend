@@ -1,6 +1,6 @@
 package features.authentication.usecases
 
-import common.usecases.CommandUseCaseWithParam
+import domain.usecases.CommandUseCaseWithParam
 import features.authentication.models.RefreshToken
 import features.authentication.repositories.RefreshTokenRepository
 import kotlinx.coroutines.flow.Flow

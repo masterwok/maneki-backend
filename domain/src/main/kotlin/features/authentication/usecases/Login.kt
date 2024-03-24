@@ -1,11 +1,10 @@
 package features.authentication.usecases
 
 import common.aliases.TokenFactory
-import common.usecases.CommandUseCaseWithParam
+import domain.usecases.CommandUseCaseWithParam
 import features.authentication.models.SetUserRefreshTokenModel
 import features.authentication.models.Token
 import features.users.repositories.UserRepository
-import kotlinx.coroutines.flow.first
 
 class Login(
     private val tokenFactory: TokenFactory,

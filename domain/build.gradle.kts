@@ -15,6 +15,8 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":core"))
+
     // Force coroutines version
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_core_version")
 

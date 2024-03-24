@@ -1,7 +1,7 @@
 package features.authentication.usecases
 
 import common.aliases.TokenFactory
-import common.usecases.CommandUseCaseWithParam
+import domain.usecases.CommandUseCaseWithParam
 import features.authentication.models.SetUserRefreshTokenModel
 import features.authentication.models.Token
 import features.users.usecases.QueryUserById

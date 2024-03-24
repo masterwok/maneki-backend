@@ -1,4 +1,4 @@
-package common.usecases
+package domain.usecases
 
 abstract class CommandUseCaseWithParam<T, R> {
     abstract suspend operator fun invoke(param: T): R
