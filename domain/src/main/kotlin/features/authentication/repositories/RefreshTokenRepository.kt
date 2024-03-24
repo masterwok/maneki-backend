@@ -5,7 +5,7 @@ import features.authentication.models.SetUserRefreshTokenModel
 import kotlinx.coroutines.flow.Flow
 
 interface RefreshTokenRepository {
-    fun queryRefreshToken(token: String): Flow<RefreshToken?>
+    suspend fun queryRefreshToken(token: String): RefreshToken?
     suspend fun setUserRefreshToken(setUserRefreshTokenModel: SetUserRefreshTokenModel)
 
 }

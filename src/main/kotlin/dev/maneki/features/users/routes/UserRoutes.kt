@@ -17,7 +17,6 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.coroutines.flow.firstOrNull
 import org.koin.ktor.ext.inject
 
 fun Route.userRouting() {
@@ -35,7 +34,7 @@ fun Route.getUserInfoRoute() {
          * Get the user information of the user.
          */
         get {
-            when (val result = queryUserByEmail(requireUserEmail).firstOrNull()) {
+            when (val result = queryUserByEmail(requireUserEmail)) {
                 is User -> call.respond(UserDto.from(result))
                 null -> call.respond(HttpStatusCode.NotFound, ApiErrorResponse("User not found"))
             }

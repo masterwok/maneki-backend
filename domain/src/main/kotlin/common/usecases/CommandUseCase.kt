@@ -1,5 +1,5 @@
 package common.usecases
 
-abstract class CommandUseCase {
-    abstract suspend operator fun invoke()
+abstract class CommandUseCase<R> {
+    abstract suspend operator fun invoke(): R
 }

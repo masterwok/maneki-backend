@@ -18,7 +18,7 @@ class Login(
 
         if (!isValid) return null
 
-        val user = userRepository.queryUserByEmail(param.email).first() ?: return null
+        val user = userRepository.queryUserByEmail(param.email) ?: return null
         val authToken = tokenFactory.create(user)
         val setUserRefreshTokenModel = with(authToken.refreshToken) {
             SetUserRefreshTokenModel(

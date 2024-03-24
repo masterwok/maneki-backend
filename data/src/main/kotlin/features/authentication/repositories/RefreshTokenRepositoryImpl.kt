@@ -16,12 +16,11 @@ import kotlinx.coroutines.withContext
 class RefreshTokenRepositoryImpl(
     private val refreshTokenQueries: RefreshTokenQueries,
 ) : RefreshTokenRepository {
-    override fun queryRefreshToken(token: String): Flow<RefreshToken?> {
+    override suspend fun queryRefreshToken(token: String): RefreshToken? {
         return refreshTokenQueries
             .selectByToken(HashUtil.hashSha256(token))
-            .asFlow()
-            .mapToOneOrNull()
-            .map { entity -> entity?.let(RefreshToken::from) }
+            .executeAsOneOrNull()
+            ?.let(RefreshToken::from)
     }
 
     override suspend fun setUserRefreshToken(

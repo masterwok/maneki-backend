@@ -14,10 +14,10 @@ class RefreshAuthToken(
     private val setUserRefreshToken: SetUserRefreshToken,
 ) : CommandUseCaseWithParam<String, Token>() {
     override suspend fun invoke(param: String): Token {
-        val persistedRefreshToken = queryUserRefreshToken(param).firstOrNull()
+        val persistedRefreshToken = queryUserRefreshToken(param)
             ?: throw Exception("Token doesn't exist")
 
-        val user = queryUserById(persistedRefreshToken.userId).firstOrNull()!!
+        val user = queryUserById(persistedRefreshToken.userId)!!
 
         val newToken = tokenFactory.create(user)
 

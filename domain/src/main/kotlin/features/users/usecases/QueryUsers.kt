@@ -1,11 +1,12 @@
 package features.users.usecases
 
-import common.usecases.QueryUseCase
+import common.usecases.CommandUseCase
 import features.users.models.User
 import features.users.repositories.UserRepository
 
 class QueryUsers(
     private val userRepository: UserRepository
-) : QueryUseCase<List<User>>() {
-    override suspend fun invoke() = userRepository.queryUsers()
+) : CommandUseCase<List<User>>() {
+    override suspend fun invoke(): List<User> = userRepository.queryUsers()
+
 }

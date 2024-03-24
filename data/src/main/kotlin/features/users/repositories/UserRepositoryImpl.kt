@@ -1,18 +1,12 @@
 package features.users.repositories
 
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
-import dev.maneki.data.UserQueries
 import common.utils.HashUtil
+import dev.maneki.data.UserQueries
 import features.users.extensions.from
 import features.users.models.CreateUserModel
 import features.users.models.User
 import features.users.repositories.exceptions.CreateUserUnknownException
 import features.users.repositories.exceptions.UserAlreadyExistsException
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
 import java.sql.SQLIntegrityConstraintViolationException
 
 class UserRepositoryImpl(
@@ -39,34 +33,26 @@ class UserRepositoryImpl(
         }
     }
 
-    override fun queryUserById(id: Int): Flow<User?> {
-        return userQueries
-            .selectById(id)
-            .asFlow()
-            .mapToOneOrNull()
-            .map { user -> user?.let(User::from) }
-    }
+    override suspend fun queryUserById(id: Int): User? = userQueries
+        .selectById(id)
+        .executeAsOneOrNull()
+        ?.let(User::from)
 
-    override fun queryUserByEmail(email: String): Flow<User?> {
-        return queryUserDaoByEmail(email).map { user -> user?.let(User::from) }
-    }
+    override suspend fun queryUserByEmail(email: String): User? = queryUserDaoByEmail(email)?.let(User::from)
 
-    private fun queryUserDaoByEmail(email: String): Flow<dev.maneki.data.User?> {
+    private fun queryUserDaoByEmail(email: String): dev.maneki.data.User? {
         return userQueries
             .selectByEmail(email)
-            .asFlow()
-            .mapToOneOrNull()
+            .executeAsOneOrNull()
     }
 
-    override fun queryUsers(): Flow<List<User>> {
-        return userQueries.users()
-            .asFlow()
-            .mapToList()
-            .map { users -> users.map(User::from) }
-    }
+    override suspend fun queryUsers(): List<User> = userQueries
+        .users()
+        .executeAsList()
+        .map(User::from)
 
     override suspend fun validatePassword(email: String, password: String): Boolean {
-        return queryUserDaoByEmail(email).firstOrNull()?.let {
+        return queryUserDaoByEmail(email)?.let {
             HashUtil.verifyPassword(password, it.password)
         } ?: false
     }
