@@ -6,11 +6,11 @@ import dev.maneki.features.users.dtos.CreateUserDto
 import dev.maneki.features.users.dtos.UserDto
 import dev.maneki.features.users.dtos.from
 import dev.maneki.features.users.dtos.toCreateUserModel
-import features.users.models.User
-import features.users.repositories.exceptions.CreateUserUnknownException
-import features.users.repositories.exceptions.UserAlreadyExistsException
-import features.users.usecases.CreateUser
-import features.users.usecases.QueryUserByEmail
+import domain.models.User
+import domain.repositories.exceptions.CreateUserUnknownException
+import domain.repositories.exceptions.UserAlreadyExistsException
+import domain.usecases.CreateUser
+import domain.usecases.QueryUserByEmail
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

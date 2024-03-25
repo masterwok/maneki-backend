@@ -2,19 +2,12 @@ package dev.maneki.di
 
 import common.extensions.init
 import dev.maneki.data.Database
-import dev.maneki.utils.JwtUtil
-import features.authentication.repositories.RefreshTokenRepository
-import features.authentication.repositories.RefreshTokenRepositoryImpl
-import features.authentication.usecases.Login
-import features.authentication.usecases.QueryUserRefreshToken
-import features.authentication.usecases.RefreshAuthToken
-import features.authentication.usecases.SetUserRefreshToken
-import features.users.repositories.UserRepository
-import features.users.repositories.UserRepositoryImpl
-import features.users.usecases.CreateUser
-import features.users.usecases.QueryUserByEmail
-import features.users.usecases.QueryUserById
-import features.users.usecases.QueryUsers
+import domain.repositories.refresh_token_respository.RefreshTokenRepository
+import utils.JwtUtil
+import domain.repositories.refresh_token_respository.RefreshTokenRepositoryImpl
+import domain.repositories.user_repository.UserRepository
+import domain.repositories.user_repository.UserRepositoryImpl
+import domain.usecases.*
 import io.ktor.server.application.*
 import org.koin.dsl.module
 

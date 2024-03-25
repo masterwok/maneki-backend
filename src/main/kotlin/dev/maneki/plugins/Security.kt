@@ -2,7 +2,7 @@ package dev.maneki.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import dev.maneki.utils.JwtUtil
+import utils.JwtUtil
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*

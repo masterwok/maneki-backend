@@ -33,8 +33,9 @@ repositories {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":authentication"))
+    implementation(project(":user"))
 
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")

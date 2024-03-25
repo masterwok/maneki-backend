@@ -1,6 +1,6 @@
 package dev.maneki.features.authentication.dtos
 
-import features.authentication.usecases.LoginParam
+import domain.usecases.LoginParam
 import kotlinx.serialization.Serializable
 
 

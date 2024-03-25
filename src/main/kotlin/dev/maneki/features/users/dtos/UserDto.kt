@@ -1,6 +1,6 @@
 package dev.maneki.features.users.dtos
 
-import features.users.models.User
+import domain.models.User
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 

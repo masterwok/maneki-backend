@@ -1,6 +1,6 @@
 package dev.maneki.extensions
 
-import dev.maneki.utils.JwtUtil
+import utils.JwtUtil
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*

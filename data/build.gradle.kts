@@ -27,8 +27,6 @@ sqldelight {
 
 
 dependencies {
-    implementation(project(":domain"))
-
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_core_version")

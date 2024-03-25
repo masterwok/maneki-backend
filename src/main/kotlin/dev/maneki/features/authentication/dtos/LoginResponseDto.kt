@@ -1,6 +1,6 @@
 package dev.maneki.features.authentication.dtos
 
-import features.authentication.models.Token
+import domain.models.Token
 import kotlinx.serialization.Serializable
 
 @Serializable

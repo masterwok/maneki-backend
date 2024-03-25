@@ -2,9 +2,9 @@ package dev.maneki.features.authentication
 
 import dev.maneki.dtos.ApiErrorResponse
 import dev.maneki.features.authentication.dtos.*
-import features.authentication.models.Token
-import features.authentication.usecases.Login
-import features.authentication.usecases.RefreshAuthToken
+import domain.models.Token
+import domain.usecases.Login
+import domain.usecases.RefreshAuthToken
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
