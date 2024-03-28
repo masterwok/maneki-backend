@@ -8,7 +8,7 @@ servers:
 paths:
   /auth:
     post:
-      description: "Login to the application."
+      description: "domain.usecases.Login to the application."
       requestBody:
         content:
           '*/*':

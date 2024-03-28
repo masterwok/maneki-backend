@@ -1,4 +1,4 @@
-package dev.maneki.extensions
+package extensions
 
 import utils.JwtUtil
 import io.ktor.server.application.*

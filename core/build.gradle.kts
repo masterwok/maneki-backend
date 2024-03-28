@@ -1,10 +1,10 @@
 val kotlin_version: String by project
-val sqldelight_version: String by project
-val mysql_connector_java_version: String by project
 val kotlinx_coroutines_core_version: String by project
+val ktor_version: String by project
 
 plugins {
     kotlin("jvm")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.20"
 }
 
 group = "dev.maneki"
@@ -16,6 +16,8 @@ repositories {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
 }
 
 tasks.getByName<Test>("test") {

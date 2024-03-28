@@ -1,8 +1,8 @@
 package dev.maneki.plugins
 
-import dev.maneki.features.authentication.authRouting
+import routes.authRouting
 import dev.maneki.features.health.routes.healthRouting
-import dev.maneki.features.users.routes.userRouting
+import routes.userRouting
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 

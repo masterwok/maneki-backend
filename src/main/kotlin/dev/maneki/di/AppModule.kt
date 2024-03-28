@@ -1,5 +1,6 @@
 package dev.maneki.di
 
+import domain.usecases.Login
 import common.extensions.init
 import dev.maneki.data.Database
 import domain.repositories.refresh_token_respository.RefreshTokenRepository
@@ -30,7 +31,8 @@ fun appModule(application: Application) = module {
     single { JwtUtil.createToken }
     single { JwtUtil.validateToken }
     single { QueryUserRefreshToken(get()) }
-    single { Login(get(), get(), get()) }
+//    single { domain.usecases.Login(get(), get(), get()) }
+    single { Login() }
     single { SetUserRefreshToken(get()) }
-    single { RefreshAuthToken(get(), get(), get(), get()) }
+//    single { RefreshAuthToken(get(), get(), get(), get()) }
 }

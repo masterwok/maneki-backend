@@ -1,8 +1,11 @@
 package common.extensions
 
-import com.squareup.sqldelight.db.SqlDriver
-import com.squareup.sqldelight.sqlite.driver.JdbcDriver
-import com.squareup.sqldelight.sqlite.driver.asJdbcDriver
+import app.cash.sqldelight.db.AfterVersion
+import app.cash.sqldelight.db.QueryResult
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.db.SqlSchema
+import app.cash.sqldelight.driver.jdbc.asJdbcDriver
+import app.cash.sqldelight.driver.jdbc.JdbcDriver;
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import common.adapters.TimestampColumnAdapter
@@ -17,14 +20,14 @@ private const val DRIVER_CLASS_MYSQL = "com.mysql.cj.jdbc.Driver"
 private const val DRIVER_CLASS_MARIADB = "org.mariadb.jdbc.Driver"
 
 fun Database.Companion.init(app: Application): Database {
-    val driver = createMySqlDatabaseDriver().apply {
+    val mysqlDriver = createMySqlDatabaseDriver().apply {
         app.environment.monitor.subscribe(ApplicationStopped) { close() }
     }
 
-    Schema.migrateIfRequired(driver)
+    Schema.migrateIfRequired(mysqlDriver)
 
     return Database(
-        driver,
+        mysqlDriver,
         refresh_tokenAdapter = Refresh_token.Adapter(
             expires_onAdapter = TimestampColumnAdapter,
         ),
@@ -35,7 +38,7 @@ fun Database.Companion.init(app: Application): Database {
     )
 }
 
-private fun SqlDriver.Schema.migrateIfRequired(driver: JdbcDriver) {
+private fun SqlSchema<QueryResult.Value<Unit>>.migrateIfRequired(driver: JdbcDriver) {
     try {
         val currentSchemaVersion = getCurrentSchemaVersion(driver)
 
@@ -47,17 +50,19 @@ private fun SqlDriver.Schema.migrateIfRequired(driver: JdbcDriver) {
     }
 }
 
-private fun getCurrentSchemaVersion(driver: JdbcDriver): Int = driver.let {
-    driver.executeQuery(
-        null,
-        "SELECT version FROM schema_version ORDER BY version DESC LIMIT 1;",
-        0,
-        null,
-    ).use {
-        it.next()
-        it.getLong(0)!!.toInt()
-    } + 1
-}
+private fun getCurrentSchemaVersion(driver: JdbcDriver): Long = driver.executeQuery(
+    null,
+    "SELECT version FROM schema_version ORDER BY version DESC LIMIT 1;",
+    { cursor ->
+        cursor.next()
+
+        val version = cursor.getLong(0) ?: 0
+
+        QueryResult.Value(version + 1)
+    },
+    0,
+    null,
+).value
 
 private fun getDriverNameByJdbcUrl(jdbcUrl: String): String = when {
     jdbcUrl.contains(JDBC_MYSQL) -> DRIVER_CLASS_MYSQL

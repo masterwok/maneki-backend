@@ -2,7 +2,7 @@ import kotlinx.datetime.Instant;
 
 
 CREATE TABLE schema_version (
-  version INT NOT NULL PRIMARY KEY
+  version INTEGER NOT NULL PRIMARY KEY
 );
 
 CREATE TABLE user (
@@ -19,7 +19,7 @@ CREATE INDEX user_id ON user(id);
 CREATE INDEX user_email ON user(email);
 
 CREATE TABLE refresh_token (
-  user_id INT NOT NULL PRIMARY KEY,
+  user_id INTEGER NOT NULL PRIMARY KEY,
   token CHAR(64) NOT NULL,
   expires_on TIMESTAMP AS Instant NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user(id)

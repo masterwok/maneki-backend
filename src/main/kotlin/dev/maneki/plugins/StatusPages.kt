@@ -1,6 +1,6 @@
 package dev.maneki.plugins
 
-import dev.maneki.dtos.ApiErrorResponse
+import dtos.ApiErrorResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*

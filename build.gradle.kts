@@ -6,8 +6,8 @@ val mysql_connector_java_version: String by project
 val koin_version: String by project
 
 plugins {
-    kotlin("jvm") version "1.7.20"
-    id("io.ktor.plugin") version "2.2.1"
+    kotlin("jvm") version "1.9.23"
+    id("io.ktor.plugin") version "2.3.9"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.20"
 }
 

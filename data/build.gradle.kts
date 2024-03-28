@@ -5,8 +5,8 @@ val mysql_connector_java_version: String by project
 val kotlinx_coroutines_core_version: String by project
 
 plugins {
-    kotlin("jvm") version "1.7.20"
-    id("com.squareup.sqldelight") version "1.5.5"
+    kotlin("jvm") version "1.9.23"
+    id("app.cash.sqldelight") version "2.0.1"
 }
 
 
@@ -18,26 +18,27 @@ repositories {
 }
 
 sqldelight {
-    database("Database") {
-        dialect = "mysql"
-        packageName = "dev.maneki.data"
-        deriveSchemaFromMigrations = true
+    databases {
+        create("Database") {
+            dialect("app.cash.sqldelight:mysql-dialect:2.0.1")
+            packageName.set("dev.maneki.data")
+            deriveSchemaFromMigrations.set(true)
+        }
     }
 }
-
 
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_core_version")
 
-    implementation("com.squareup.sqldelight:coroutines-extensions:$sqldelight_version")
+    implementation("app.cash.sqldelight:coroutines-extensions:$sqldelight_version")
 
     // DateTimes
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     // MySQL JDBC driver
-    implementation("com.squareup.sqldelight:jdbc-driver:$sqldelight_version")
+    implementation("app.cash.sqldelight:jdbc-driver:$sqldelight_version")
     runtimeOnly("mysql:mysql-connector-java:$mysql_connector_java_version")
 
     // MariaDB JDBC driver

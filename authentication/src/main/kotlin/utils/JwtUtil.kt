@@ -6,7 +6,6 @@ import domain.aliases.TokenFactory
 import domain.aliases.TokenValidator
 import domain.models.RefreshToken
 import domain.models.Token
-import domain.models.User
 import extensions.randomAlphaNumeric
 import kotlinx.datetime.Clock
 import java.util.*
@@ -31,24 +30,24 @@ object JwtUtil {
             if (isNullOrEmpty()) throw IllegalArgumentException("Failed to find JWT_SECRET environment variable required to sign tokens.")
         }
 
-    private fun createRefreshToken(user: User): RefreshToken {
+    private fun createRefreshToken(userId: Int): RefreshToken {
         return RefreshToken(
-            user.id,
+            userId,
             String.randomAlphaNumeric(REFRESH_TOKEN_LENGTH),
             Clock.System.now().plus(refreshTokenExpirationDuration)
         )
     }
 
-    val createToken = TokenFactory { user ->
+    val createToken = TokenFactory { payload ->
         Token(
             token = JWT
                 .create()
                 .withExpiresAt(Date(System.currentTimeMillis() + oneHourMs))
-                .withClaim(CLAIM_KEY_EMAIL, user.email)
-                .withClaim(CLAIM_KEY_FIRST_NAME, user.firstName)
-                .withClaim(CLAIM_KEY_LAST_NAME, user.lastName)
+                .withClaim(CLAIM_KEY_EMAIL, payload.email)
+                .withClaim(CLAIM_KEY_FIRST_NAME, payload.firstName)
+                .withClaim(CLAIM_KEY_LAST_NAME, payload.lastName)
                 .sign(Algorithm.HMAC256(secret)),
-            refreshToken = createRefreshToken(user)
+            refreshToken = createRefreshToken(payload.userId)
         )
     }
 

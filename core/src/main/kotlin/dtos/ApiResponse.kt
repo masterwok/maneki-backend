@@ -1,4 +1,4 @@
-package dev.maneki.dtos
+package dtos
 
 import kotlinx.serialization.Serializable
 
